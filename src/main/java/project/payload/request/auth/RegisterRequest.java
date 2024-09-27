@@ -2,8 +2,14 @@ package project.payload.request.auth;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
+import project.validator.ExitUser;
 
 @Getter
+@ExitUser.List({
+        @ExitUser(column = "email", dbColumn = "email",message = "Email exist"),
+        @ExitUser(column = "username", dbColumn = "id", message = "Username exist")
+//        @ExitUser(column = "mobile", dbColumn = "mobile", message = "Phone exist")
+})
 public class RegisterRequest {
 
     @NotBlank(message = "Username is required")

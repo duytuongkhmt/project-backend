@@ -36,4 +36,16 @@ public class UsersService {
         user.setConfirmedAt(LocalDate.now());
         usersRepository.save(user);
     }
+
+    public boolean existsByUsername(String username) {
+        return usersRepository.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return usersRepository.existsByEmail(email);
+    }
+
+    public boolean existsByMobile(String mobile) {
+        return usersRepository.existsByMobile(mobile);
+    }
 }
