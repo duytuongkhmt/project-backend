@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -39,10 +40,13 @@ public class Account implements UserDetails, Serializable {
     private String avatar;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private Integer activeByEmail;
-    private Integer role;
+
+    private Boolean isEmailVerified = false;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
     private Boolean isArtist;
-    private String bio;
+    private String profileId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -70,13 +74,8 @@ public class Account implements UserDetails, Serializable {
     }
 
 
-    public static class ROLE{
-        public static Integer ADMIN = 0;
-        public static Integer USER = 1;
-        public static Integer ARTIST = 2;
-    }
-    public static class ACTIVE_BY_EMAIL {
-        public static Integer PENDING = 0;
-        public static Integer ACTIVE = 1;
+    public enum Role {
+        ADMIN, USER, ARTIST
     }
 }
+
