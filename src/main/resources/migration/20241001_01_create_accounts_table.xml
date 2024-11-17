@@ -1,0 +1,56 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="tuongtd" id="gp">
+        <createTable tableName="accounts">
+            <column name="id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="click_id" type="VARCHAR(40)"/>
+            <column name="offer_id" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="offer_type" type="VARCHAR(100)"/>
+            <column name="publisher_id" type="VARCHAR(100)"/>
+            <column name="advertiser_id" type="VARCHAR(100)"/>
+
+            <column name="event_date" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="event_name" type="VARCHAR(200)"/>
+
+            <column name="adflex_payout" type="DOUBLE"/>
+            <column name="publisher_payout" type="DOUBLE"/>
+            <column name="adflex_payout_vnd" type="DOUBLE"/>
+            <column name="publisher_payout_vnd" type="DOUBLE"/>
+
+            <column name="advertiser_invoice_id" type="VARCHAR(40)"/>
+            <column name="publisher_invoice_id" type="VARCHAR(40)"/>
+
+            <column name="status" type="VARCHAR(20)"/>
+            <column name="payment_status" type="VARCHAR(20)"/>
+
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated_by" type="VARCHAR(200)" />
+            <column name="updated_reason" type="VARCHAR(200)" />
+        </createTable>
+        <createIndex tableName="conversions" indexName="conversions_date">
+            <column name="event_date"/>
+        </createIndex>
+        <createTable tableName="conversion_history">
+            <column name="id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="conversion_id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="change_list" type="JSONB" />
+        </createTable>
+        <createIndex tableName="conversion_history" indexName="conversion_history_id">
+            <column name="conversion_id" />
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

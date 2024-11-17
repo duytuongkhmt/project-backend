@@ -10,13 +10,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import project.config.MD5PasswordEncoder;
-import project.service.UsersService;
+import project.service.UserService;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UsersService userService;
+    private final UserService userService;
 
     @Bean
     public UserDetailsService userDetailsService() {

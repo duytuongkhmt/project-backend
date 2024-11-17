@@ -4,8 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import project.model.Account;
 
+import java.util.List;
+
 @Repository
-public interface UsersRepository extends JpaRepository<Account, Long> {
+public interface UserRepository extends JpaRepository<Account, String> {
     Account findByUsername(String username);
 
     Account findByEmail(String username);
