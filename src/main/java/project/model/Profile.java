@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@Entity
+@Table(name = "profiles")
 public class Profile {
     @Id
     @UuidGenerator
@@ -27,6 +29,8 @@ public class Profile {
     private String note;
     private String status;
 
-
-
+    public static class STATUS {
+        public static final String SHOW = "show";
+        public static final String DELETE = "delete";
+    }
 }

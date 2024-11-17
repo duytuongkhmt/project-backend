@@ -32,7 +32,7 @@ public class LoginController {
         if (user == null) {
             return ResponseEntity.ok(ResponseObject.error("Username or password is invalid", HttpStatus.BAD_REQUEST));
         }
-        if (!Objects.equals(user.getActiveByEmail(), Account.ACTIVE_BY_EMAIL.ACTIVE)) {
+        if (!user.getIsEmailVerified()) {
             return ResponseEntity.ok(ResponseObject.error("Email not verified", HttpStatus.BAD_REQUEST));
         }
 

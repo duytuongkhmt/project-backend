@@ -1,8 +1,6 @@
 package project.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "comment")
+@Table(name = "comments")
 public class Comment {
     @Id
     @UuidGenerator
@@ -24,7 +22,13 @@ public class Comment {
     private String content;
     private Double time;
     private String title;
-    private Double price;
+
+    @Column(name="post_id")
+    private String postId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
+
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }

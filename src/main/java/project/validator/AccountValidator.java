@@ -5,11 +5,11 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanWrapperImpl;
 
-import project.service.UsersService;
+import project.service.UserService;
 
 @RequiredArgsConstructor
 public class AccountValidator implements ConstraintValidator<ExitUser, Object> {
-    private final UsersService usersService;
+    private final UserService usersService;
     String column;
     String dbColumn;
 

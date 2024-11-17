@@ -1,5 +1,6 @@
 package project.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,13 +14,14 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Set;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "account")
+@Table(name = "accounts")
 public class Account implements UserDetails, Serializable {
     private static final long serialVersionUID = -297553281792804396L;
     @Id
@@ -45,8 +47,26 @@ public class Account implements UserDetails, Serializable {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    private Boolean isArtist;
     private String profileId;
+    @ManyToOne
+    @JoinColumn(name = "conversation_id")
+    @JsonBackReference
+    private Conversation conversation;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Follower> followers;
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Follower> following;
+
+    @ManyToMany
+    @JoinTable(
+            name = "friends",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
+    @JsonBackReference
+    private Set<Account> friends;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -75,7 +95,16 @@ public class Account implements UserDetails, Serializable {
 
 
     public enum Role {
-        ADMIN, USER, ARTIST
+        ADMIN, USER, ARTIST;
+
+        public static Role fromString(String role) {
+            for (Role r : Role.values()) {
+                if (r.name().equalsIgnoreCase(role)) {
+                    return r;
+                }
+            }
+            throw new IllegalArgumentException("Unknown role: " + role);
+        }
     }
 }
 

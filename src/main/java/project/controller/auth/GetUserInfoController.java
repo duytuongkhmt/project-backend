@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.business.AuthenticateBusiness;
 import project.payload.response.ResponseObject;
-import project.resource.UsersResource;
+import project.resource.UserResource;
 
 @Slf4j
 @RestController
@@ -19,7 +19,7 @@ public class GetUserInfoController {
 
     @GetMapping("/user")
     public ResponseEntity<ResponseObject> authenticateUser() {
-        UsersResource result = authenticateBusiness.getUserInfo();
+        UserResource result = authenticateBusiness.getUserInfo();
         return ResponseEntity.ok(ResponseObject.ok(result));
     }
 }

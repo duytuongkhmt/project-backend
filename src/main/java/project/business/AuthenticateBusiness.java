@@ -4,20 +4,20 @@ package project.business;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import project.mapper.UsersMapper;
+import project.mapper.UserMapper;
 import project.model.Account;
 import project.payload.request.auth.LoginRequest;
-import project.resource.UsersResource;
+import project.resource.UserResource;
 import project.sercurity.JwtService;
 import project.service.AuthenticationService;
 import project.service.GoogleService;
-import project.service.UsersService;
+import project.service.UserService;
 
 
 @RequiredArgsConstructor
 @Component
 public class AuthenticateBusiness {
-    private final UsersService usersService;
+    private final UserService usersService;
     private final JwtService jwtService;
     private final AuthenticationService authenticationService;
     private final GoogleService googleService;
@@ -35,10 +35,10 @@ public class AuthenticateBusiness {
         return authenticationService.login(users);
     }
 
-    public UsersResource getUserInfo() {
+    public UserResource getUserInfo() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Account user = usersService.findByUsername(username);
-        return UsersMapper.map(user);
+        return UserMapper.map(user);
     }
 
     public String authByGoogle(String code, String redirectUri) {

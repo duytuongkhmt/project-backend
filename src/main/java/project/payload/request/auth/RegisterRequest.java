@@ -2,6 +2,7 @@ package project.payload.request.auth;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
+import project.model.Account;
 import project.validator.ExitUser;
 
 @Getter
@@ -16,7 +17,7 @@ public class RegisterRequest {
     @Size(min = 6, max = 24, message = "Tên đăng nhập phải có độ dài từ 6 đến 24 kí tự")
     @Pattern(regexp = "^[a-z0-9]+$", message = "Tên đăng nhập chỉ bao gồm các chữ cái viết thường và chữ số")
     private String username;
-    @NotBlank(message="Tên là trường bắt buộc")
+//    @NotBlank(message="Tên là trường bắt buộc")
     @Size(min = 3, message = "Tên phải có ít nhất 3 kí tự")
     private String fullName;
     @Email(message = "Email không đúng định dạng")
@@ -30,5 +31,8 @@ public class RegisterRequest {
 //    @NotBlank(message = "Số điện thoại là trường bắt buộc")
     private String mobile;
     @NotNull(message = "Role là trường bắt buộc")
-    private Integer role;
+    private String role;
+    public Account.Role getRole() {
+        return Account.Role.fromString(role);
+    }
 }

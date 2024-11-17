@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.config.MD5PasswordEncoder;
 import project.model.Account;
 import project.payload.request.auth.RegisterRequest;
-import project.service.UsersService;
+import project.service.UserService;
 import project.service.email.EmailSender;
 
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 @Component
 public class RegisterBusiness {
-    private final UsersService usersService;
+    private final UserService usersService;
     private final MD5PasswordEncoder passwordEncoder;
     private final EmailSender emailSender;
     @Value("${verify.account.url}")
@@ -60,14 +60,10 @@ public class RegisterBusiness {
                 .modifiedAt(time)
                 .mobile(registerRequest.getMobile())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .activeByEmail(0)
                 .confirmationToken(token)
                 .createdAt(time)
                 .expiresAt(time.plusMinutes(15))
                 .build();
-        if(Objects.equals(registerRequest.getRole(), Account.ROLE.ARTIST)){
-            user.setIsArtist(true);
-        }
         usersService.save(user);
     }
 
@@ -87,10 +83,9 @@ public class RegisterBusiness {
             return "token expired";
         }
         user.setCreatedAt(LocalDateTime.now());
-//        user.setActiveByEmail();
         usersService.setConfirmedAt(token);
         usersService.enableUser(user.getEmail());
-        user.setActiveByEmail(Account.ACTIVE_BY_EMAIL.ACTIVE);
+        user.setIsEmailVerified(true);
         usersService.save(user);
 
         return "confirmed";
