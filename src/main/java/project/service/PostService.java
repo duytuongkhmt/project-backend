@@ -2,8 +2,10 @@ package project.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import project.model.Order;
 import project.model.Post;
 import project.model.PostMedia;
 import project.payload.request.user.PostRequest;
@@ -14,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.data.jpa.domain.Specification.where;
+import static project.repository.spec.PostSpecification.statusNotDelete;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -21,22 +26,21 @@ public class PostService {
     private final PostMediaRepository mediaRepository;
 
 
-    public List<Post> getByFilter(PageRequest pageRequest) {
-        return postRepository.findAll();
+    public Page<Post> getByFilter(PostRequest request, PageRequest pageRequest) {
+        return postRepository.findAll(where(statusNotDelete()),pageRequest);
     }
-
 
     public Post getById(String id) {
         Optional<Post> post = postRepository.findById(id);
         return post.orElse(null);
     }
 
-    public void save(PostRequest request) {
+    public Post save(Post newPost) {
         // Create Post entity
         Post post = new Post();
-        BeanUtils.copyProperties(request, post);
+        BeanUtils.copyProperties(newPost, post);
         List<PostMedia> postMediaList = new ArrayList<>();
-        request.getMedia().forEach(media -> {
+        newPost.getMediaList().forEach(media -> {
             PostMedia postMedia = new PostMedia();
             BeanUtils.copyProperties(media, postMedia);
             postMediaList.add(postMedia);
@@ -44,7 +48,7 @@ public class PostService {
         });
         post.setMediaList(postMediaList);
 
-        postRepository.save(post);
+        return postRepository.save(post);
 
     }
 
@@ -56,4 +60,7 @@ public class PostService {
     }
 
 
+    public Post findById(String id) {
+            return postRepository.findByIdIs(id);
+    }
 }

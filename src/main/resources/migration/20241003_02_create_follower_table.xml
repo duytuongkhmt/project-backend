@@ -1,0 +1,42 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet author="tuongtd" id="create-followers-table">
+        <createTable tableName="followers">
+            <!-- Primary Key -->
+            <column name="id" type="VARCHAR(40)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <!-- User ID -->
+            <column name="user_id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Follower ID -->
+            <column name="follower_id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Created At -->
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Foreign Key Constraints -->
+<!--        <addForeignKeyConstraint baseTableName="followers"-->
+<!--                                 baseColumnNames="user_id"-->
+<!--                                 referencedTableName="accounts"-->
+<!--                                 referencedColumnNames="id"-->
+<!--                                 constraintName="fk_followers_user_id" />-->
+
+<!--        <addForeignKeyConstraint baseTableName="followers"-->
+<!--                                 baseColumnNames="follower_id"-->
+<!--                                 referencedTableName="accounts"-->
+<!--                                 referencedColumnNames="id"-->
+<!--                                 constraintName="fk_followers_follower_id" />-->
+    </changeSet>
+</databaseChangeLog>

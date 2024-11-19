@@ -17,7 +17,9 @@ public class Order {
     private String artistId;
     @Column(name="booker_id")
     private String bookerId;
+    @Column(name="`from`")
     private LocalDateTime from;
+    @Column(name="`to`")
     private LocalDateTime to;
     private Double price;
     private String note;

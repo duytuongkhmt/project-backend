@@ -59,6 +59,10 @@ public class Account implements UserDetails, Serializable {
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Follower> following;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Profile profile;
+
+
     @ManyToMany
     @JoinTable(
             name = "friends",

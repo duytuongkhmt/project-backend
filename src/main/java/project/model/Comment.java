@@ -23,8 +23,8 @@ public class Comment {
     private Double time;
     private String title;
 
-    @Column(name="post_id")
-    private String postId;
+//    @Column(name="post_id")
+//    private String postId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;

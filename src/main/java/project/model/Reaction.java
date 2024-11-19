@@ -1,9 +1,6 @@
 package project.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,6 +9,7 @@ import java.time.LocalDateTime;
 
 
 @Data
+@Entity
 @Table(name="reactions")
 public class Reaction {
     @Id

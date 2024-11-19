@@ -4,17 +4,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.model.Account;
 import project.model.Follower;
+import project.model.Profile;
 import project.repository.FollowerRepository;
+import project.repository.ProfileRepository;
 import project.repository.UserRepository;
 import project.util.AuthUtils;
 
 import java.time.LocalDate;
-
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final FollowerRepository followerRepository;
+    private final ProfileRepository profileRepository;
 
     public Account findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -93,5 +95,11 @@ public class UserService {
 
         userRepository.save(user);
         userRepository.save(friend);
+    }
+
+    public Profile getProfile(){
+        String userName = AuthUtils.getCurrentUsername();
+        Account user= userRepository.findByUsername(userName);
+        return user.getProfile();
     }
 }

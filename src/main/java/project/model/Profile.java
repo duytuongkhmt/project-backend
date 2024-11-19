@@ -1,14 +1,21 @@
 package project.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UuidGenerator;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "profiles")
 public class Profile {
     @Id
@@ -16,14 +23,21 @@ public class Profile {
     private String id;
 
     private String coverPhoto;
-    private String userId;
+//    @Column( name = "user_id")
+//    private String userId;
+    private String username;
 
     private String bio;
 
     private String stageName;
+    @Type(JsonType.class)
+    @Column( columnDefinition = "JSONB")
     private List<String> genre;
     private Double rate;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private Account user;
 
     private Double price;
     private String note;

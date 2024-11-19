@@ -15,10 +15,10 @@ public class Follower {
     @UuidGenerator
     private String id;
 
-    @Column(name = "user_id")
-    private String userId;
-    @Column(name = "follower_id")
-    private String followerId;
+//    @Column(name = "user_id")
+//    private String userId;
+//    @Column(name = "follower_id")
+//    private String followerId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

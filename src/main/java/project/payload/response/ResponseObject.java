@@ -37,7 +37,10 @@ public class ResponseObject {
         this.data = data;
         this.success = success;
     }
-
+    public ResponseObject(Object data, Object meta) {
+        this.data = data;
+        this.meta = meta;
+    }
     public ResponseObject(Object data) {
         this.data = data;
         this.success = true;
