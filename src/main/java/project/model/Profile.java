@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UuidGenerator;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -21,15 +22,10 @@ public class Profile {
     @Id
     @UuidGenerator
     private String id;
-
+    private String avatar;
     private String coverPhoto;
-//    @Column( name = "user_id")
-//    private String userId;
-    private String username;
-
     private String bio;
-
-    private String stageName;
+    private String nickname;
     @Type(JsonType.class)
     @Column( columnDefinition = "JSONB")
     private List<String> genre;
@@ -38,13 +34,13 @@ public class Profile {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Account user;
-
+    private LocalDate birthday;
+    private Integer yearOfExperience;
+    private Integer bookNumber;
+    private Double hourOfPerformance;
+    private String address;
     private Double price;
     private String note;
     private String status;
 
-    public static class STATUS {
-        public static final String SHOW = "show";
-        public static final String DELETE = "delete";
-    }
 }

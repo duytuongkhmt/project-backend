@@ -70,12 +70,10 @@ public class RegisterBusiness {
         Profile profile = Profile.builder()
                 .bio("Welcome to my profile!")
                 .coverPhoto(null)
-                .stageName(registerRequest.getUsername())
                 .genre(new ArrayList<>())
                 .rate(0.0)
                 .price(0.0)
                 .note(null)
-                .status(Profile.STATUS.SHOW)
                 .build();
         user.setProfile(profile);
         profile.setUser(user);
