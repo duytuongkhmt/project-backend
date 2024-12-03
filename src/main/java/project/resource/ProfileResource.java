@@ -2,6 +2,7 @@ package project.resource;
 
 import lombok.Getter;
 import lombok.Setter;
+import project.common.Constant;
 
 import java.time.LocalDate;
 
@@ -23,4 +24,18 @@ public class ProfileResource {
     private String address;
     private Double price;
     private String note;
+
+    public String getAvatar() {
+        if (avatar == null) {
+            return null;
+        }
+        return avatar.replace(Constant.UPLOAD_DIR, "");
+    }
+
+    public String getCoverPhoto() {
+        if (coverPhoto == null) {
+            return null;
+        }
+        return coverPhoto.replace(Constant.UPLOAD_DIR, "");
+    }
 }

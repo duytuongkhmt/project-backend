@@ -3,6 +3,9 @@ package project.common;
 import java.time.format.DateTimeFormatter;
 
 public class Constant {
+
+    public static final String UPLOAD_DIR = "D:/Hangout/Graduation/project-frontend/image";
+
     public static final class PAGE {
         public static int DEFAULT = 0;
         public static int LIMIT = 20;

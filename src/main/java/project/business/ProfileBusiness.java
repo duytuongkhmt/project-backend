@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import project.common.Constant;
 import project.model.Account;
 import project.model.Profile;
 import project.payload.request.user.ProfileUpdateRequest;
@@ -24,7 +25,6 @@ public class ProfileBusiness {
 
     private final ProfileService profileService;
     private final UserService userService;
-    private static final String UPLOAD_DIR = "D:/hangout/project";
 
     public ProfileResource getByUsername(String username) {
         Account account = userService.findByUsername(username);
@@ -82,7 +82,7 @@ public class ProfileBusiness {
 
         // Đường dẫn lưu tệp
         String fileName = AuthUtils.getCurrentUsername()+"_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        String destinationPath = UPLOAD_DIR + "/" + type + "/" + fileName;
+        String destinationPath = Constant.UPLOAD_DIR + "/" + type + "/" + fileName;
 
         try {
             File destinationFile = new File(destinationPath);

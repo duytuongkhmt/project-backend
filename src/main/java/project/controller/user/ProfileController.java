@@ -37,8 +37,8 @@ public class ProfileController {
         return ResponseEntity.ok(ResponseObject.ok(profileBusiness.saveAvatar(avatar)));
     }
 
-    @PutMapping("/upload-photo-cover")
-    public ResponseEntity<ResponseObject> uploadCoverPhoto(@RequestParam(value = "photo-cover", required = false) MultipartFile photoCover) {
+    @PutMapping("/upload-cover-photo")
+    public ResponseEntity<ResponseObject> uploadCoverPhoto(@RequestParam(value = "cover-photo", required = false) MultipartFile photoCover) {
         return ResponseEntity.ok(ResponseObject.ok(profileBusiness.saveCoverPhoto(photoCover)));
     }
 }
