@@ -15,18 +15,14 @@ import project.resource.ProfileResource;
 public class ProfileController {
     private final ProfileBusiness profileBusiness;
 
-    @GetMapping
-    public ResponseEntity<ResponseObject> getProfile() {
-        ProfileResource result = profileBusiness.getProfile();
-        return ResponseEntity.ok(ResponseObject.ok(result));
-    }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<ResponseObject> getProfileByUsername(@PathVariable String username) {
-        ProfileResource result = profileBusiness.getByUsername(username);
+
+    @GetMapping("/{code}")
+    public ResponseEntity<ResponseObject> getProfileByCode(@PathVariable String code) {
+        ProfileResource result = profileBusiness.getProfileByCode(code);
         return ResponseEntity.ok(ResponseObject.ok(result));
     }
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<ResponseObject> updateProfile(@RequestBody ProfileUpdateRequest request) {
         return ResponseEntity.ok(ResponseObject.ok(profileBusiness.update(request)));
 

@@ -5,6 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import project.model.Account;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends CrudRepository<Account, String>, JpaSpecificationExecutor<Account> {
     Account findByUsername(String username);
@@ -18,5 +20,6 @@ public interface UserRepository extends CrudRepository<Account, String>, JpaSpec
     Boolean existsByEmail(String email);
 
     Boolean existsByMobile(String mobile);
+    List<Account> findAllByIsEmailVerifiedIs(Boolean isEmailVerified);
 
 }

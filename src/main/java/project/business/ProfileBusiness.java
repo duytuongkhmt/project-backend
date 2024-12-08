@@ -1,11 +1,13 @@
 package project.business;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import project.common.Constant;
+import project.mapper.UserMapper;
 import project.model.Account;
 import project.model.Profile;
 import project.payload.request.user.ProfileUpdateRequest;
@@ -26,36 +28,21 @@ public class ProfileBusiness {
     private final ProfileService profileService;
     private final UserService userService;
 
-    public ProfileResource getByUsername(String username) {
-        Account account = userService.findByUsername(username);
-        Profile profile = account.getProfile();
-        ProfileResource profileResource = new ProfileResource();
-        BeanUtils.copyProperties(profile, profileResource);
-        return profileResource;
+    public ProfileResource getProfileByCode(String code) {
+        Profile profile = profileService.findByProfileCode(code);
+        return UserMapper.map(profile);
     }
 
 
-    public ProfileResource getProfile() {
-        String username = AuthUtils.getCurrentUsername();
-        Account account = userService.findByUsername(username);
-        Profile profile = account.getProfile();
-        ProfileResource profileResource = new ProfileResource();
-        BeanUtils.copyProperties(profile, profileResource);
-        profileResource.setFullName(profile.getUser().getFullName());
-        profileResource.setRole(profile.getUser().getRole().name());
-        return profileResource;
-    }
 
-
+    @Transactional
     public ProfileResource update(ProfileUpdateRequest request) {
         Profile profile = profileService.getProfileById(request.getId());
         BeanUtils.copyProperties(request, profile);
-
+        profile.getUser().setMobile(request.getMobile());
+        profile.getUser().setFullName(request.getFullName());
         profile = profileService.save(profile);
-        ProfileResource profileResource = new ProfileResource();
-        BeanUtils.copyProperties(profile, profileResource);
-        return profileResource;
-
+        return UserMapper.map(profile);
     }
 
     // Lưu avatar
@@ -74,7 +61,7 @@ public class ProfileBusiness {
         }
 
         // Kiểm tra định dạng tệp
-        Pattern pattern = Pattern.compile("(.+)\\.(png|gif|jpg|jpeg)$", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(.+)\\.(png|gif|jpg|jpeg|webp|svg)$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(file.getOriginalFilename());
         if (!matcher.matches()) {
             throw new RuntimeException("You can only upload image files.");

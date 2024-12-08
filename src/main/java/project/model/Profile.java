@@ -1,5 +1,6 @@
 package project.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,9 +31,11 @@ public class Profile {
     @Column( columnDefinition = "JSONB")
     private List<String> genre;
     private Double rate;
+    private String gender;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private Account user;
     private LocalDate birthday;
     private Integer yearOfExperience;
@@ -42,5 +45,6 @@ public class Profile {
     private Double price;
     private String note;
     private String status;
+    private String profileCode;
 
 }

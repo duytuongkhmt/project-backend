@@ -73,6 +73,7 @@ public class RegisterBusiness {
                 .genre(new ArrayList<>())
                 .rate(0.0)
                 .price(0.0)
+                .profileCode(generateRandomNumberString(10))
                 .note(null)
                 .build();
         user.setProfile(profile);
@@ -103,5 +104,15 @@ public class RegisterBusiness {
 
         return "confirmed";
     }
+    private String generateRandomNumberString(int length) {
+        Random random = new Random();
+        StringBuilder result = new StringBuilder();
 
+        for (int i = 0; i < length; i++) {
+            int digit = random.nextInt(10);
+            result.append(digit);
+        }
+
+        return result.toString();
+    }
 }

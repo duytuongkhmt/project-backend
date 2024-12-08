@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -39,7 +41,7 @@ public class Account implements UserDetails, Serializable {
     private String confirmationToken;
     private String activeToken;
     private String verifyToken;
-    private String avatar;
+    @CreationTimestamp
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -53,24 +55,19 @@ public class Account implements UserDetails, Serializable {
     @JsonBackReference
     private Conversation conversation;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Follower> followers;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Follow> followers;
 
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Follower> following;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Profile profile;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "friends",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "friend_id")
-    )
-    @JsonBackReference
-    private Set<Account> friends;
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Friendship> friendRequestsSent;
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Friendship> friendRequestsReceived;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
