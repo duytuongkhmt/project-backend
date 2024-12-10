@@ -9,12 +9,14 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 
 @Data
+@Entity
+@Table(name="massages")
 public class Message {
     @Id
     @UuidGenerator
     private String id;
-    @Column(name = "conversation_id")
-    private String conversationId;
+//    @Column(name = "conversation_id")
+//    private String conversationId;
     private String senderId;
 
     @Enumerated(EnumType.STRING)

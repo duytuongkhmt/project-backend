@@ -1,0 +1,46 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet author="tuongtd" id="create-profiles-table">
+        <createTable tableName="profiles">
+            <!-- Primary Key -->
+            <column name="id" type="VARCHAR(40)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <!-- User Relationship -->
+            <column name="user_id" type="VARCHAR(40)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <!-- Basic Information -->
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="bio" type="TEXT"/>
+            <column name="cover_photo" type="VARCHAR(255)"/>
+            <column name="stage_name" type="VARCHAR(100)"/>
+
+            <!-- JSON Field -->
+            <column name="genre" type="JSONB">
+                <constraints nullable="true"/>
+            </column>
+
+            <!-- Additional Fields -->
+            <column name="rate" type="DOUBLE PRECISION"/>
+            <column name="price" type="DOUBLE PRECISION"/>
+            <column name="note" type="TEXT"/>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Foreign Key Constraint -->
+<!--        <addForeignKeyConstraint baseTableName="profiles"-->
+<!--                                 baseColumnNames="user_id"-->
+<!--                                 referencedTableName="accounts"-->
+<!--                                 referencedColumnNames="id" />-->
+    </changeSet>
+</databaseChangeLog>

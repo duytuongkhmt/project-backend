@@ -1,5 +1,6 @@
 package project.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,25 +10,21 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "followers")
-public class Follower {
+@Table(name = "follows")
+public class Follow {
     @Id
     @UuidGenerator
     private String id;
 
-    @Column(name = "user_id")
-    private String userId;
-    @Column(name = "follower_id")
     private String followerId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonBackReference
     private Account user;
 
-    @ManyToOne
-    @JoinColumn(name = "follower_id", nullable = false)
-    private Account follower;
-
     @CreationTimestamp
-    private LocalDateTime createdAt ;
+    private LocalDateTime createdAt;
+
+
 }

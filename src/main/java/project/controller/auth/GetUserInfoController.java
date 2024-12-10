@@ -15,9 +15,9 @@ import project.resource.UserResource;
 @RequestMapping("/api/v1/auth/info")
 @RequiredArgsConstructor
 public class GetUserInfoController {
-    private AuthenticateBusiness authenticateBusiness;
+    private final AuthenticateBusiness authenticateBusiness;
 
-    @GetMapping("/user")
+    @GetMapping
     public ResponseEntity<ResponseObject> authenticateUser() {
         UserResource result = authenticateBusiness.getUserInfo();
         return ResponseEntity.ok(ResponseObject.ok(result));

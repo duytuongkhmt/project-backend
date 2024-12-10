@@ -8,13 +8,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Data
+@Entity
 @Table(name="post_medias")
 public class PostMedia {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @Column(name = "post_id")
-    private String postId;
+//    @Column(name = "post_id")
+//    private String postId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
@@ -23,6 +24,7 @@ public class PostMedia {
 
     private String type; // image, video, etc.
 
+    @Column(name="`order`")
     private Integer order;
 
     @UpdateTimestamp

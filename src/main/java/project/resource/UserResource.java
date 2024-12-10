@@ -18,4 +18,6 @@ public class UserResource {
     private LocalDate createdAt;
     private LocalDate modifiedAt;
     private String role;
+    private String profileCode;
+    private String profileId;
 }

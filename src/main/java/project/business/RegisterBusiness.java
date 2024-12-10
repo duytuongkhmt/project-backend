@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import project.config.MD5PasswordEncoder;
 import project.model.Account;
+import project.model.Profile;
 import project.payload.request.auth.RegisterRequest;
 import project.service.UserService;
 import project.service.email.EmailSender;
@@ -52,6 +53,7 @@ public class RegisterBusiness {
     @Async
     protected void saveUserInfo(RegisterRequest registerRequest, String token) {
         LocalDateTime time = LocalDateTime.now();
+
         Account user = Account.builder()
                 .fullName(registerRequest.getFullName())
                 .email(registerRequest.getEmail())
@@ -64,6 +66,18 @@ public class RegisterBusiness {
                 .createdAt(time)
                 .expiresAt(time.plusMinutes(15))
                 .build();
+        // Tạo đối tượng Profile
+        Profile profile = Profile.builder()
+                .bio("Welcome to my profile!")
+                .coverPhoto(null)
+                .genre(new ArrayList<>())
+                .rate(0.0)
+                .price(0.0)
+                .profileCode(generateRandomNumberString(10))
+                .note(null)
+                .build();
+        user.setProfile(profile);
+        profile.setUser(user);
         usersService.save(user);
     }
 
@@ -90,5 +104,15 @@ public class RegisterBusiness {
 
         return "confirmed";
     }
+    private String generateRandomNumberString(int length) {
+        Random random = new Random();
+        StringBuilder result = new StringBuilder();
 
+        for (int i = 0; i < length; i++) {
+            int digit = random.nextInt(10);
+            result.append(digit);
+        }
+
+        return result.toString();
+    }
 }

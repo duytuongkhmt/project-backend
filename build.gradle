@@ -47,7 +47,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-websocket:3.3.4'
     implementation 'org.springframework:spring-messaging:6.1.12'
+    implementation 'com.google.api-client:google-api-client:1.33.0'
 
+    implementation "io.hypersistence:hypersistence-utils-hibernate-62:3.5.0"
 
     implementation 'io.swagger:swagger-models:1.5.22'
     compileOnly 'org.projectlombok:lombok'
