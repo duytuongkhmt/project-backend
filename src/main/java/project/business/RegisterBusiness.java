@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import project.config.MD5PasswordEncoder;
 import project.model.Account;
+import project.model.Bank;
 import project.model.Profile;
 import project.payload.request.auth.RegisterRequest;
 import project.service.UserService;
@@ -66,6 +67,8 @@ public class RegisterBusiness {
                 .createdAt(time)
                 .expiresAt(time.plusMinutes(15))
                 .build();
+
+
         // Tạo đối tượng Profile
         Profile profile = Profile.builder()
                 .bio("Welcome to my profile!")
@@ -76,6 +79,9 @@ public class RegisterBusiness {
                 .profileCode(generateRandomNumberString(10))
                 .note(null)
                 .build();
+        Bank bank=new Bank();
+        profile.setBank(bank);
+        bank.setProfile(profile);
         user.setProfile(profile);
         profile.setUser(user);
         usersService.save(user);

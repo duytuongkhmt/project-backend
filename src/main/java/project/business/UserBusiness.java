@@ -6,6 +6,7 @@ import project.mapper.UserMapper;
 import project.model.Account;
 import project.model.Friendship;
 import project.model.Profile;
+import project.resource.FriendshipResource;
 import project.resource.ProfileResource;
 import project.resource.UserResource;
 import project.service.FriendshipService;
@@ -68,15 +69,15 @@ public class UserBusiness {
         String userName = AuthUtils.getCurrentUsername();
         Account sender = userService.findByUsername(userName);
         Account receiver = profileService.getProfileById(receiverId).getUser();
-        Friendship friendship = friendshipService.findBySenderAndReceiver( receiver, sender);
-        if(friendship == null) {
+        Friendship friendship = friendshipService.findBySenderAndReceiver(receiver, sender);
+        if (friendship == null) {
             return;
         }
         friendship.setStatus(Friendship.STATUS.ACCEPTED);
         friendshipService.save(friendship);
     }
 
-    public void unfriend(String friendId){
+    public void unfriend(String friendId) {
         String userName = AuthUtils.getCurrentUsername();
         Account sender = userService.findByUsername(userName);
         Account receiver = profileService.getProfileById(friendId).getUser();
@@ -91,20 +92,57 @@ public class UserBusiness {
         }
     }
 
-    public String checkStatusFriend(String friendId) {
-        String status = null;
+    public FriendshipResource checkStatusFriend(String friendId) {
         String userName = AuthUtils.getCurrentUsername();
         Account sender = userService.findByUsername(userName);
         Account receiver = profileService.getProfileById(friendId).getUser();
-
+        FriendshipResource friendshipResource = new FriendshipResource();
         Friendship friendship1 = friendshipService.findBySenderAndReceiver(sender, receiver);
         Friendship friendship2 = friendshipService.findBySenderAndReceiver(receiver, sender);
         if (friendship1 != null) {
-            status=friendship1.getStatus();
+            friendshipResource.setStatus(friendship1.getStatus());
+            friendshipResource.setRequester(friendship1.getSender().getProfile().getId());
         }
         if (friendship2 != null) {
-            status=friendship2.getStatus();
+            friendshipResource.setStatus(friendship2.getStatus());
+            friendshipResource.setRequester(friendship2.getSender().getProfile().getId());
         }
-        return status;
+        return friendshipResource;
     }
+
+    public List<ProfileResource> getSuggestFriend() {
+        Account myAccount = getMyAccount();
+        Profile myProfile = myAccount.getProfile();
+        List<Profile> profiles = profileService.getAllActiveProfileExceptionMe(myProfile.getId());
+        List<Profile> getRequestProfiles = profiles.stream().filter(profile -> {
+            Friendship friendship1 = friendshipService.findBySenderAndReceiver(profile.getUser(), myAccount);
+            Friendship friendship2 = friendshipService.findBySenderAndReceiver(myAccount, profile.getUser());
+            return friendship1 == null && friendship2 == null;
+        }).toList();
+        return getRequestProfiles.stream().map(UserMapper::map).toList();
+    }
+
+    public List<ProfileResource> getPendingFriend() {
+        Account myAccount = getMyAccount();
+        Profile myProfile = myAccount.getProfile();
+        List<Profile> profiles = profileService.getAllActiveProfileExceptionMe(myProfile.getId());
+        List<Profile> getRequestProfiles = profiles.stream().filter(profile -> {
+            Friendship friendship = friendshipService.findBySenderAndReceiver(profile.getUser(), myAccount);
+            if (friendship != null) {
+                return Friendship.STATUS.PENDING.equals(friendship.getStatus());
+            }
+            return false;
+        }).toList();
+        return getRequestProfiles.stream().map(UserMapper::map).toList();
+    }
+
+    private Account getMyAccount() {
+        String userName = AuthUtils.getCurrentUsername();
+        return userService.findByUsername(userName);
+    }
+
+    private Profile getMyProfile() {
+        return getMyAccount().getProfile();
+    }
+
 }

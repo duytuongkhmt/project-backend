@@ -1,6 +1,7 @@
 package project.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.Setter;
 import project.common.Constant;
@@ -22,17 +23,20 @@ public class ProfileResource {
     private String role;
     private LocalDate birthday;
     private Integer yearOfExperience;
-    private Integer bookNumber;
+    private Integer totalBook;
     private Double hourOfPerformance;
     private String address;
     private Double price;
     private String note;
     private String bio;
     private String gender;
-    private String totalFollowers;
-    private String totalFriends;
+    private Integer totalFollower;
+    private Integer totalFollowing;
+    private Integer totalFriend;
     private String profileCode;
+    private Double rate;
     private List<String> genre;
+    private BankResource bank;
 
     public Integer getAge(){
         if (birthday == null) {

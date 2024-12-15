@@ -2,7 +2,6 @@ package project.business;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import project.model.Profile;
 import project.service.ProfileService;
 import project.service.UserService;
 

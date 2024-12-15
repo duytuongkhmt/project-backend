@@ -4,13 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class OrderUpdateRequest {
     private String id;
-    private LocalDate from;
-    private LocalDate to;
+    private LocalDateTime from;
+    private LocalDateTime to;
+    private String artistId;
     private Double price;
+    private String address;
     private String note;
 }

@@ -1,6 +1,8 @@
 package project.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -68,6 +70,7 @@ public class Account implements UserDetails, Serializable {
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friendship> friendRequestsReceived;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
