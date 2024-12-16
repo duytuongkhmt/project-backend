@@ -2,9 +2,12 @@ package project.service;
 
 
 import lombok.RequiredArgsConstructor;
+import static org.springframework.data.jpa.domain.Specification.where;
 import org.springframework.stereotype.Service;
+import project.model.Account;
 import project.model.Profile;
 import project.repository.ProfileRepository;
+import static project.repository.spec.ProfileSpecification.*;
 
 import java.util.List;
 
@@ -30,5 +33,18 @@ public class ProfileService {
 
     public List<Profile> findByIds(List<String> ids) {
         return profileRepository.findAllByIdIn(ids);
+    }
+
+    public List<Profile> getTopArtist(String profileId) {
+        return  profileRepository.findAll(
+                where(notIsProfileId(profileId))
+                        .and(roleIs(Account.Role.ARTIST.name()))
+                        .and(isActive()));
+    }
+
+    public List<Profile> getAllActiveProfileExceptionMe(String profileId) {
+        return  profileRepository.findAll(
+                where(notIsProfileId(profileId))
+                        .and(isActive()));
     }
 }

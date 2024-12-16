@@ -1,6 +1,8 @@
 package project.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,5 +48,18 @@ public class Profile {
     private String note;
     private String status;
     private String profileCode;
+
+    @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    @JsonIgnore
+    private List<Order> artistOrders;
+
+    @OneToMany(mappedBy = "booker", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    @JsonIgnore
+    private List<Order> userOrders;
+
+    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL)
+    private Bank bank;
 
 }

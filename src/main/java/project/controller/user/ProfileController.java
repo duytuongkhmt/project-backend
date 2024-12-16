@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.business.ProfileBusiness;
+import project.payload.request.user.BankUpdateRequest;
 import project.payload.request.user.ProfileUpdateRequest;
 import project.payload.response.ResponseObject;
 import project.resource.ProfileResource;
@@ -36,5 +37,15 @@ public class ProfileController {
     @PutMapping("/upload-cover-photo")
     public ResponseEntity<ResponseObject> uploadCoverPhoto(@RequestParam(value = "cover-photo", required = false) MultipartFile photoCover) {
         return ResponseEntity.ok(ResponseObject.ok(profileBusiness.saveCoverPhoto(photoCover)));
+    }
+
+    @PutMapping("/upload-qr-bank")
+    public ResponseEntity<ResponseObject> uploadQRBank(@RequestParam(value = "qr", required = false) MultipartFile photoCover) {
+        return ResponseEntity.ok(ResponseObject.ok(profileBusiness.uploadQR(photoCover)));
+    }
+
+    @PutMapping("/update-bank")
+    public ResponseEntity<ResponseObject> updateBankInfo(@RequestBody BankUpdateRequest request){
+        return ResponseEntity.ok(ResponseObject.ok(profileBusiness.saveBankInfo(request)));
     }
 }

@@ -10,6 +10,7 @@ public class Constant {
         public static int DEFAULT = 0;
         public static int LIMIT = 20;
     }
+
     public static final class FORMAT_DATE {
         public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
         public static final DateTimeFormatter ISO = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -30,6 +31,9 @@ public class Constant {
         public static final String FROM = "from";
         public static final String TO = "to";
         public static final String PAYMENT_DATE = "paymentDate";
+
+        public static final String ROLE = "role";
+        public static final String IS_EMAIL_VERIFIED = "isEmailVerified";
 
         public static final String STATUS = "status";
         public static final String PAYMENT_PERCENT = "paymentPercent";

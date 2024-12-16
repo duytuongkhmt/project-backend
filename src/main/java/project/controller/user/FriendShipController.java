@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.business.UserBusiness;
 import project.payload.response.ResponseObject;
+import project.resource.FriendshipResource;
 import project.resource.ProfileResource;
 
 import java.util.List;
@@ -42,7 +43,19 @@ public class FriendShipController {
 
     @GetMapping("/check/{id}")
     public ResponseEntity<ResponseObject> getFriends(@PathVariable String id) {
-        String result = userBusiness.checkStatusFriend(id);
+        FriendshipResource result = userBusiness.checkStatusFriend(id);
+        return ResponseEntity.ok(ResponseObject.ok(result));
+    }
+
+    @GetMapping("/suggest-friend")
+    public ResponseEntity<ResponseObject> getSuggestFriend() {
+        List<ProfileResource> result = userBusiness.getSuggestFriend();
+        return ResponseEntity.ok(ResponseObject.ok(result));
+    }
+
+    @GetMapping("/pending-friend")
+    public ResponseEntity<ResponseObject> getPendingFriend() {
+        List<ProfileResource> result = userBusiness.getPendingFriend();
         return ResponseEntity.ok(ResponseObject.ok(result));
     }
 

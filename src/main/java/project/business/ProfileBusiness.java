@@ -9,8 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 import project.common.Constant;
 import project.mapper.UserMapper;
 import project.model.Account;
+import project.model.Bank;
 import project.model.Profile;
+import project.payload.request.user.BankUpdateRequest;
 import project.payload.request.user.ProfileUpdateRequest;
+import project.resource.BankResource;
 import project.resource.ProfileResource;
 import project.service.ProfileService;
 import project.service.UserService;
@@ -33,6 +36,10 @@ public class ProfileBusiness {
         return UserMapper.map(profile);
     }
 
+    public ProfileResource getById(String id) {
+        Profile profile = profileService.getProfileById(id);
+        return UserMapper.map(profile);
+    }
 
 
     @Transactional
@@ -45,6 +52,21 @@ public class ProfileBusiness {
         return UserMapper.map(profile);
     }
 
+    public ProfileResource saveBankInfo(BankUpdateRequest request) {
+        String username = AuthUtils.getCurrentUsername();
+        Account account = userService.findByUsername(username);
+        Profile profile = account.getProfile();
+        Bank bank = profile.getBank();
+        if (bank == null) {
+            bank = new Bank();
+            bank.setProfile(profile);
+        }
+        BeanUtils.copyProperties(request, bank);
+        profile.setBank(bank);
+        profileService.save(profile);
+        return UserMapper.map(profile);
+    }
+
     // Lưu avatar
     public String saveAvatar(MultipartFile avatar) {
         return processUpload(avatar, "avatar");
@@ -53,6 +75,10 @@ public class ProfileBusiness {
     // Lưu ảnh bìa
     public String saveCoverPhoto(MultipartFile photoCover) {
         return processUpload(photoCover, "cover-photo");
+    }
+
+    public String uploadQR(MultipartFile qr) {
+        return processUpload(qr, "qr");
     }
 
     private String processUpload(MultipartFile file, String type) {
@@ -68,7 +94,7 @@ public class ProfileBusiness {
         }
 
         // Đường dẫn lưu tệp
-        String fileName = AuthUtils.getCurrentUsername()+"_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        String fileName = AuthUtils.getCurrentUsername() + "_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
         String destinationPath = Constant.UPLOAD_DIR + "/" + type + "/" + fileName;
 
         try {
@@ -76,7 +102,7 @@ public class ProfileBusiness {
             destinationFile.getParentFile().mkdirs(); // Tạo thư mục nếu chưa tồn tại
             file.transferTo(destinationFile); // Lưu tệp
 
-            saveUrl(destinationFile,type);
+            saveUrl(destinationFile, type);
 
             // Lưu thông tin đường dẫn tệp vào DB (có thể cập nhật hồ sơ người dùng ở đây)
             // profile.setAvatarUrl(destinationPath); (hoặc tương tự)
@@ -85,16 +111,26 @@ public class ProfileBusiness {
             throw new RuntimeException("Failed to save " + type + " file.", e);
         }
     }
-    private void saveUrl( File destinationFile,String type) {
+
+    private void saveUrl(File destinationFile, String type) {
         String username = AuthUtils.getCurrentUsername();
         Account account = userService.findByUsername(username);
         Profile profile = account.getProfile();
-        if(type.equals("avatar")){
+        if (type.equals("avatar")) {
             profile.setAvatar(destinationFile.getAbsolutePath());
-        }
-        else {
+        } else if (type.equals("cover-photo")) {
             profile.setCoverPhoto(destinationFile.getAbsolutePath());
+        } else {
+            Bank bank = profile.getBank();
+            if (bank == null) {
+                bank = new Bank();
+            }
+            bank.setQr(destinationFile.getAbsolutePath());
+            bank.setProfile(profile);
+            profile.setBank(bank);
         }
         profileService.save(profile);
     }
+
+
 }

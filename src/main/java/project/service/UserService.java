@@ -20,9 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final FollowRepository followRepository;
-    private final ProfileRepository profileRepository;
-    private final FriendshipRepository friendshipRepository;
 
     public Account findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -109,6 +106,8 @@ public class UserService {
         Account user = userRepository.findByUsername(userName);
         return user.getProfile();
     }
+
+
 
 //    public void sendFriendRequest(Account user, Account friend) {
 //
