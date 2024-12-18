@@ -1,0 +1,66 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet author="tuongtd" id="create-accounts-table">
+        <createTable tableName="accounts">
+            <!-- Primary Key -->
+            <column name="id" type="VARCHAR(40)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <!-- Basic Information -->
+            <column name="username" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)" />
+            <column name="full_name" type="VARCHAR(100)" />
+            <column name="mobile" type="VARCHAR(15)" />
+            <column name="email" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="remember_token" type="VARCHAR(255)" />
+
+            <!-- Token Information -->
+            <column name="confirmation_token" type="VARCHAR(255)" />
+            <column name="active_token" type="VARCHAR(255)" />
+            <column name="verify_token" type="VARCHAR(255)" />
+
+            <!-- Time-related Columns -->
+            <column name="email_verified_at" type="DATE" />
+            <column name="confirmed_at" type="DATE" />
+            <column name="expires_at" type="TIMESTAMP" />
+            <column name="created_at" type="TIMESTAMP">
+            </column>
+            <column name="modified_at" type="TIMESTAMP">
+            </column>
+
+            <!-- Other Information -->
+            <column name="avatar" type="VARCHAR(255)" />
+            <column name="is_email_verified" type="BOOLEAN" defaultValue="false" />
+
+            <!-- Role Enum -->
+            <column name="role" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Profile Relation -->
+            <column name="profile_id" type="VARCHAR(40)" />
+
+            <!-- Conversation Relation -->
+            <column name="conversation_id" type="VARCHAR(40)" />
+        </createTable>
+
+<!--        &lt;!&ndash; Foreign Key Constraints &ndash;&gt;-->
+<!--        <addForeignKeyConstraint baseTableName="accounts"-->
+<!--                                 baseColumnNames="conversation_id"-->
+<!--                                 referencedTableName="conversations"-->
+<!--                                 referencedColumnNames="id" />-->
+
+<!--        <addForeignKeyConstraint baseTableName="accounts"-->
+<!--                                 baseColumnNames="profile_id"-->
+<!--                                 referencedTableName="profiles"-->
+<!--                                 referencedColumnNames="id" />-->
+    </changeSet>
+</databaseChangeLog>

@@ -8,6 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,25 +21,20 @@ import org.springframework.http.HttpStatus;
 @Setter
 @Slf4j
 public class ResponseObject {
-    @JsonIgnore
-    private static final ObjectMapper MAPPER = new ObjectMapper();
     private Object meta;
     private Object data;
     private boolean success = false;
     private Integer statusCode = HttpStatus.OK.value();
 
-    static {
-        MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
-                .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-                .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    }
 
     public ResponseObject(Object data, boolean success) {
         this.data = data;
         this.success = success;
     }
-
+    public ResponseObject(Object data, Object meta) {
+        this.data = data;
+        this.meta = meta;
+    }
     public ResponseObject(Object data) {
         this.data = data;
         this.success = true;
@@ -82,9 +79,16 @@ public class ResponseObject {
     @Override
     public String toString() {
         try {
+            ObjectMapper MAPPER = new ObjectMapper();
+            MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+                    .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                    .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            MAPPER.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            MAPPER.registerModule(new JavaTimeModule());
             return MAPPER.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            log.error(e.toString());
+            log.error("test ", e);
             return "";
         }
     }

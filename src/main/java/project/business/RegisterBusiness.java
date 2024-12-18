@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import project.config.MD5PasswordEncoder;
 import project.model.Account;
+import project.model.Bank;
+import project.model.Profile;
 import project.payload.request.auth.RegisterRequest;
-import project.service.UsersService;
+import project.service.UserService;
 import project.service.email.EmailSender;
 
 import java.time.LocalDateTime;
@@ -22,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 @Component
 public class RegisterBusiness {
-    private final UsersService usersService;
+    private final UserService usersService;
     private final MD5PasswordEncoder passwordEncoder;
     private final EmailSender emailSender;
     @Value("${verify.account.url}")
@@ -52,6 +54,7 @@ public class RegisterBusiness {
     @Async
     protected void saveUserInfo(RegisterRequest registerRequest, String token) {
         LocalDateTime time = LocalDateTime.now();
+
         Account user = Account.builder()
                 .fullName(registerRequest.getFullName())
                 .email(registerRequest.getEmail())
@@ -60,14 +63,27 @@ public class RegisterBusiness {
                 .modifiedAt(time)
                 .mobile(registerRequest.getMobile())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .activeByEmail(0)
                 .confirmationToken(token)
                 .createdAt(time)
                 .expiresAt(time.plusMinutes(15))
                 .build();
-        if(Objects.equals(registerRequest.getRole(), Account.ROLE.ARTIST)){
-            user.setIsArtist(true);
-        }
+
+
+        // Tạo đối tượng Profile
+        Profile profile = Profile.builder()
+                .bio("Welcome to my profile!")
+                .coverPhoto(null)
+                .genre(new ArrayList<>())
+                .rate(0.0)
+                .price(0.0)
+                .profileCode(generateRandomNumberString(10))
+                .note(null)
+                .build();
+        Bank bank=new Bank();
+        profile.setBank(bank);
+        bank.setProfile(profile);
+        user.setProfile(profile);
+        profile.setUser(user);
         usersService.save(user);
     }
 
@@ -87,13 +103,22 @@ public class RegisterBusiness {
             return "token expired";
         }
         user.setCreatedAt(LocalDateTime.now());
-//        user.setActiveByEmail();
         usersService.setConfirmedAt(token);
         usersService.enableUser(user.getEmail());
-        user.setActiveByEmail(Account.ACTIVE_BY_EMAIL.ACTIVE);
+        user.setIsEmailVerified(true);
         usersService.save(user);
 
         return "confirmed";
     }
+    private String generateRandomNumberString(int length) {
+        Random random = new Random();
+        StringBuilder result = new StringBuilder();
 
+        for (int i = 0; i < length; i++) {
+            int digit = random.nextInt(10);
+            result.append(digit);
+        }
+
+        return result.toString();
+    }
 }
