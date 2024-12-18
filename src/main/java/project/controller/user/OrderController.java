@@ -20,8 +20,11 @@ import project.payload.response.ResponseObject;
 import project.resource.OrderResource;
 import project.resource.PostResource;
 import project.resource.ProfileResource;
+import project.resource.ShowTopResource;
 import project.service.OrderService;
 import project.util.PagingUtil;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user/order")
@@ -71,7 +74,7 @@ public class OrderController {
     }
 
     @PutMapping({"/update-status", "/update-status/"})
-    public ResponseEntity<ResponseObject> updateStatus(@PathVariable String id, @RequestParam String status,  @RequestParam(required = false)String reason) {
+    public ResponseEntity<ResponseObject> updateStatus(@RequestParam String id, @RequestParam String status,  @RequestParam(required = false)String reason) {
         if (!orderBusiness.checkAvailable(id)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ResponseObject.error("Order cannot be created: request is invalid or resources are unavailable.", HttpStatus.BAD_REQUEST));
@@ -84,6 +87,12 @@ public class OrderController {
     public ResponseEntity<ResponseObject> delete(@PathVariable String id) {
         orderBusiness.deleteById(id);
         return ResponseEntity.ok(ResponseObject.ok("Ok"));
+    }
+
+    @GetMapping({"/show-top", "/show-top/"})
+    public ResponseEntity<ResponseObject> showTop(OrderRequest request) {
+        List<ShowTopResource> result = orderBusiness.getShowTopReport(request);
+        return new ResponseEntity<>(new ResponseObject(result), HttpStatus.OK);
     }
 
 }

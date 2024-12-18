@@ -16,4 +16,12 @@ public class OrderUpdateRequest {
     private Double price;
     private String address;
     private String note;
+
+    public LocalDateTime getFrom() {
+        return from.plusHours(7);
+    }
+
+    public LocalDateTime getTo() {
+        return to.plusHours(7);
+    }
 }

@@ -10,22 +10,23 @@ import project.mapper.UserMapper;
 import project.model.Account;
 import project.model.Order;
 import project.model.Profile;
+import project.model.data.ShowTopReport;
 import project.payload.request.user.OrderCreateRequest;
 import project.payload.request.user.OrderRequest;
 import project.payload.request.user.OrderUpdateRequest;
 import project.resource.OrderResource;
 import project.resource.ProfileResource;
+import project.resource.ShowTopResource;
 import project.service.OrderService;
 import project.service.ProfileService;
 import project.service.UserService;
 import project.util.AuthUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Component
@@ -132,4 +133,18 @@ public class OrderBusiness {
 
     }
 
+    public List<ShowTopResource> getShowTopReport(OrderRequest request) {
+        String userName = AuthUtils.getCurrentUsername();
+        Account account = userService.findByUsername(userName);
+        request.setArtistIds(List.of(account.getProfile().getId()));
+        List<ShowTopReport> showTopReports = orderService.getShowTopRevenueReport(request);
+
+
+        return showTopReports.parallelStream().map(top -> {
+            ShowTopResource resource = new ShowTopResource();
+            resource.setKey(top.getKey());
+            resource.setValue(top.getValue());
+            return resource;
+        }).toList();
+    }
 }

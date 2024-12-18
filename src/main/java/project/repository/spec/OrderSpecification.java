@@ -37,6 +37,45 @@ public class OrderSpecification {
         };
     }
 
+    public static Specification<Order> checkRequestBoundaryWithinRange(LocalDateTime requestFrom, LocalDateTime requestTo) {
+        return (root, cq, cb) -> {
+            if (requestFrom == null && requestTo == null) {
+                return null; // Không áp dụng điều kiện nếu cả requestFrom và requestTo đều null
+            }
+
+            if (requestFrom != null && requestTo != null) {
+                return cb.or(
+                        // Kiểm tra request.from nằm giữa db.from và db.to
+                        cb.and(
+                                cb.greaterThanOrEqualTo(root.get(COLUMN.FROM), requestFrom),
+                                cb.lessThanOrEqualTo(root.get(COLUMN.TO), requestFrom)
+                        ),
+                        // Kiểm tra request.to nằm giữa db.from và db.to
+                        cb.and(
+                                cb.greaterThanOrEqualTo(root.get(COLUMN.FROM), requestTo),
+                                cb.lessThanOrEqualTo(root.get(COLUMN.TO), requestTo)
+                        )
+                );
+            }
+
+            if (requestFrom != null) {
+                // Chỉ kiểm tra request.from nằm giữa khoảng db.from và db.to
+                return cb.and(
+                        cb.greaterThanOrEqualTo(root.get(COLUMN.FROM), requestFrom),
+                        cb.lessThanOrEqualTo(root.get(COLUMN.TO), requestFrom)
+                );
+            }
+
+            // Chỉ kiểm tra request.to nằm giữa khoảng db.from và db.to
+            return cb.and(
+                    cb.greaterThanOrEqualTo(root.get(COLUMN.FROM), requestTo),
+                    cb.lessThanOrEqualTo(root.get(COLUMN.TO), requestTo)
+            );
+        };
+    }
+
+
+
 
     public static Specification<Order> artistIdIn(List<String> artistIds) {
         return (root, cq, cb) -> (artistIds != null && !artistIds.isEmpty()) ? root.get(COLUMN.ARTIST_ID).in(artistIds) : null;

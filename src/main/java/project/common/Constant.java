@@ -21,11 +21,12 @@ public class Constant {
         public static final String ARTIST_ID = "artistId";
         public static final String USER_ID = "userId";
         public static final String BOOKER_ID = "bookerId";
-        public static final String BOOK_ID = "bookId";
+        public static final String FULL_NAME = "fullName";
         public static final String PAYMENT_STATUS = "paymentStatus";
         public static final String ID = "id";
-        public static final String AM = "am";
         public static final String NAME = "name";
+        public static final String AM = "am";
+        public static final String PRICE = "price";
         public static final String DATE = "date";
         public static final String START_AT = "startAt";
         public static final String FROM = "from";
