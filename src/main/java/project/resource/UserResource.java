@@ -4,9 +4,8 @@ import lombok.Data;
 
 import java.time.LocalDate;
 @Data
-public class UsersResource {
+public class UserResource {
     private String username;
-    private String password;
     private String fullName;
     private String mobile;
     private String email;
@@ -18,7 +17,7 @@ public class UsersResource {
     private String avatar;
     private LocalDate createdAt;
     private LocalDate modifiedAt;
-    private Integer role;
-    private Boolean isArtist;
-    private String bio;
+    private String role;
+    private String profileCode;
+    private String profileId;
 }
