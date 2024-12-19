@@ -1,5 +1,6 @@
 package project.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,13 +17,21 @@ public class Review {
     private String id;
     private String comment;
     private Double rate;
+    @Column(name = "order_id")
     private String orderId;
 
     @OneToOne
-    @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    @JoinColumn(name = "order_id", nullable = false, updatable = false, insertable = false)
+    @JsonBackReference
     private Order order;
+    @Column(name = "user_id")
     private String userId;
     private String artistId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonBackReference
+    private Profile user;
 
 
     @CreationTimestamp

@@ -20,6 +20,7 @@ public class Constant {
     public static final class COLUMN {
         public static final String ARTIST_ID = "artistId";
         public static final String USER_ID = "userId";
+        public static final String PROFILE = "profile";
         public static final String BOOKER_ID = "bookerId";
         public static final String FULL_NAME = "fullName";
         public static final String PAYMENT_STATUS = "paymentStatus";

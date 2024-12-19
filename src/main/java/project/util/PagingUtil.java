@@ -25,10 +25,10 @@ public class PagingUtil {
 
     public static Map<String, Object> createMeta(Page<?> page) {
         Map<String, Object> meta = new HashMap<>();
-        meta.put("total_elements", page.getTotalElements());
-        meta.put("total_pages", page.getTotalPages());
+        meta.put("total", page.getTotalElements());
+        meta.put("totalPages", page.getTotalPages());
         meta.put("size", page.getSize());
-        meta.put("number", page.getNumber());
+        meta.put("page", page.getNumber());
         return meta;
     }
 }

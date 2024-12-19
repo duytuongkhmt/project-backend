@@ -11,21 +11,15 @@ import java.util.List;
 @Getter
 @Setter
 public class PostCreateRequest {
-    @NotNull(message = "Title is required")
-    private String title;
-
+    @NotNull
+    @NotBlank
     private String content;
 
-    @NotNull(message = "Media cannot be empty")
     private List<MediaRequest> mediaList;
 
     private List<String> tags;
 
-    @NotNull(message = "User ID is required")
-    private String userId;
-
     @Data
-    @NotNull
     public static class MediaRequest {
         @NotBlank(message = "Media URL is required")
         private String url;

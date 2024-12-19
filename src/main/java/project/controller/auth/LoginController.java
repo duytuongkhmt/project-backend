@@ -21,8 +21,7 @@ import project.payload.response.ResponseObject;
 @RequiredArgsConstructor
 public class LoginController {
 
-    @Autowired
-    private AuthenticateBusiness authenticateBusiness;
+    private final AuthenticateBusiness authenticateBusiness;
 
     @PostMapping("/login")
     public ResponseEntity<ResponseObject> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {

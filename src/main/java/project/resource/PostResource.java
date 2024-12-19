@@ -1,6 +1,5 @@
 package project.resource;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,16 +10,12 @@ public class PostResource {
     private String id;
     private String title;
     private String content;
-    private List<MediaResponse> media;
+    private List<MediaResource> medias;
     private List<String> tags;
-    private String authorId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    @Data
-    @Builder
-    public static class MediaResponse {
-        private String url;
-        private String type;
-        private Integer order;
-    }
+    private ProfileResource profile;
+    private List<ProfileResource> likePeople;
+    private List<CommentResource> comments;
+
 }
