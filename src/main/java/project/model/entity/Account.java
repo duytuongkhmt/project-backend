@@ -43,7 +43,7 @@ public class Account implements UserDetails, Serializable {
     @CreationTimestamp
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-
+    @Builder.Default
     private Boolean isEmailVerified = false;
 
     @Enumerated(EnumType.STRING)

@@ -1,9 +1,12 @@
 package project.util;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import project.common.Constant;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class PagingUtil {
@@ -18,5 +21,14 @@ public class PagingUtil {
         return PageRequest.of(
                 Objects.requireNonNullElse(page, Constant.PAGE.DEFAULT),
                 Objects.requireNonNullElse(limit, Constant.PAGE.LIMIT));
+    }
+
+    public static Map<String, Object> createMeta(Page<?> page) {
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("total_elements", page.getTotalElements());
+        meta.put("total_pages", page.getTotalPages());
+        meta.put("size", page.getSize());
+        meta.put("number", page.getNumber());
+        return meta;
     }
 }
