@@ -104,10 +104,15 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(InvalidDataException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidDataException(
+    public ResponseEntity<Object> handleInvalidDataException(
             InvalidDataException ex
     ) {
-        return new ResponseEntity<>(ErrorResponse.errorMessageAndCause(ex.getMessage(), ex.getCause().getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+        Map<String, Object> response = Map.of(
+                "status", "error",
+                "statusCode", HttpStatus.BAD_REQUEST,
+                "message", ex.getMessage()
+        );
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(BindException.class)
