@@ -16,6 +16,7 @@ import project.payload.request.user.OrderUpdateRequest;
 import project.resource.OrderResource;
 import project.resource.ProfileResource;
 import project.resource.ShowTopResource;
+import project.resource.SummaryOrderResource;
 import project.service.OrderService;
 import project.service.ProfileService;
 import project.service.UserService;
@@ -64,6 +65,11 @@ public class OrderBusiness {
             ProfileResource artist = profileResourceMap.get(order.getArtistId());
             return OrderMapper.map(order, booker, artist);
         });
+    }
+
+    public SummaryOrderResource getSummary(OrderRequest filter) {
+        List<Order> orders = orderService.getByFilter(filter);
+        return new SummaryOrderResource(orders);
     }
 
     public OrderResource getById(String id) {

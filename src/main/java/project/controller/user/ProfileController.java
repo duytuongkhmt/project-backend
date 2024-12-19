@@ -16,7 +16,11 @@ import project.resource.ProfileResource;
 public class ProfileController {
     private final ProfileBusiness profileBusiness;
 
-
+    @GetMapping("/search/{key}")
+    public ResponseEntity<ResponseObject> getProfilesByKey(@PathVariable String key) {
+        ProfileResource result = profileBusiness.getProfileByCode(key);
+        return ResponseEntity.ok(ResponseObject.ok(result));
+    }
 
     @GetMapping("/{code}")
     public ResponseEntity<ResponseObject> getProfileByCode(@PathVariable String code) {

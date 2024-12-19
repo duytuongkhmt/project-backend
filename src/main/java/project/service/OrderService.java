@@ -40,6 +40,17 @@ public class OrderService {
         ), pageRequest);
     }
 
+    public List<Order> getByFilter(OrderRequest request) {
+        return orderRepository.findAll(where(
+                checkTimeFrom(request.getFrom().atStartOfDay())
+                        .and(checkTimeTo(request.getTo().atStartOfDay()))
+                        .and(statusIs(request.getStatus()))
+                        .and(artistIdIn(request.getArtistIds()))
+                        .and(bookerIdIn(request.getBookerIds()))
+        ));
+    }
+
+
     public List<Order> getConfirmedOrderByAristId(String id) {
         return orderRepository.findAll(where(
                 checkTimeFrom(LocalDateTime.now())

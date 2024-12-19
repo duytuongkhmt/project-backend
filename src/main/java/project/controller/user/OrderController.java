@@ -25,6 +25,7 @@ import project.service.OrderService;
 import project.util.PagingUtil;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/user/order")
@@ -36,13 +37,9 @@ public class OrderController {
     public ResponseEntity<ResponseObject> index(OrderRequest orderRequest, PaginateRequest paginateRequest) {
         Sort sort = Sort.by(paginateRequest.getSort(), paginateRequest.getColumn());
         PageRequest pageRequest = PagingUtil.getPageRequest(paginateRequest.getPage(), paginateRequest.getLimit(), sort);
-
         Page<OrderResource> orderResources = orderBusiness.getOrderResources(orderRequest, pageRequest);
-        ResponseObject.Meta meta = new ResponseObject.Meta();
-        meta.setPage(pageRequest.getPageNumber());
-        meta.setTotal(orderResources.getTotalElements());
-        meta.setMessage("Ok");
-
+        Map<String, Object> meta = PagingUtil.createMeta(orderResources);
+        meta.put("summary", orderBusiness.getSummary(orderRequest));
         ResponseObject result = new ResponseObject(orderResources.getContent(), meta);
         return ResponseEntity.ok(result);
     }
