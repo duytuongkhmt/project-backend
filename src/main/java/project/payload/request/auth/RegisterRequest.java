@@ -2,7 +2,7 @@ package project.payload.request.auth;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
-import project.model.Account;
+import project.model.entity.Account;
 import project.validator.ExitUser;
 
 @Getter

@@ -5,11 +5,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import project.model.Order;
-import project.model.Post;
-import project.model.PostMedia;
+import project.model.entity.Post;
+import project.model.entity.PostMedia;
 import project.payload.request.user.*;
-import project.resource.OrderResource;
 import project.resource.PostResource;
 import project.service.PostService;
 

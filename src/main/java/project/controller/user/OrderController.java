@@ -47,6 +47,15 @@ public class OrderController {
         return ResponseEntity.ok(result);
     }
 
+
+    @GetMapping({"/scheduled/{id}", "/scheduled/{id}"})
+    public ResponseEntity<ResponseObject> getScheduledOfArtist(@PathVariable String id) {
+        List<OrderResource> orderResources = orderBusiness.getScheduledOfArtist(id);
+        return ResponseEntity.ok(new ResponseObject(orderResources));
+    }
+
+
+
     @GetMapping({"/{id}", "/{id}/"})
     public ResponseEntity<ResponseObject> show(@PathVariable String id) {
         OrderResource orderResource = orderBusiness.getById(id);

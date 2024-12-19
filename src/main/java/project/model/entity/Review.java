@@ -1,4 +1,4 @@
-package project.model;
+package project.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,29 +7,26 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-
 @Data
 @Entity
-@Table(name="reactions")
-public class Reaction {
+@Table(name="reviews")
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    private String comment;
+    private Double rate;
+    private String orderId;
 
+    @OneToOne
+    @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    private Order order;
     private String userId;
     private String artistId;
 
-    private Double rate;
-    private String content;
-    private String status;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    public static class STATUS {
-        public static final String SHOW = "show";
-        public static final String DELETE = "delete";
-    }
 }

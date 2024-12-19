@@ -1,7 +1,7 @@
 package project.repository.spec;
 
 import org.springframework.data.jpa.domain.Specification;
-import project.model.Conversation;
+import project.model.entity.Conversation;
 
 import java.util.List;
 import java.util.stream.Collectors;

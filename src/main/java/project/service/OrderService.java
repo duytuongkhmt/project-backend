@@ -4,13 +4,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import project.common.Constant;
-import project.model.Order;
-import project.model.Profile;
+import project.model.entity.Order;
 import project.model.data.ShowTopReport;
 import project.payload.request.user.OrderCreateRequest;
 import project.payload.request.user.OrderRequest;
@@ -22,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specification.where;
 import static project.repository.spec.OrderSpecification.*;
@@ -41,6 +38,14 @@ public class OrderService {
                         .and(artistIdIn(request.getArtistIds()))
                         .and(bookerIdIn(request.getBookerIds()))
         ), pageRequest);
+    }
+
+    public List<Order> getConfirmedOrderByAristId(String id) {
+        return orderRepository.findAll(where(
+                checkTimeFrom(LocalDateTime.now())
+                        .and(artistIdIn(List.of(id)))
+                        .and(statusIn(List.of(Order.STATUS.CONFIRMED, Order.STATUS.SUCCESS)))
+        ));
     }
 
     public void deleteById(String id) {

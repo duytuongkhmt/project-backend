@@ -2,9 +2,8 @@ package project.controller.user;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import project.model.Conversation;
+import project.model.entity.Conversation;
 import project.service.ws.ConversationService;
 
 import java.util.List;

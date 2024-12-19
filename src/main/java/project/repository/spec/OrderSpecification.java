@@ -2,10 +2,8 @@ package project.repository.spec;
 
 import org.springframework.data.jpa.domain.Specification;
 import project.common.Constant.COLUMN;
-import project.model.Order;
-import project.common.Constant.FORMAT_DATE;
+import project.model.entity.Order;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -84,6 +82,10 @@ public class OrderSpecification {
     public static Specification<Order> bookerIdIn(List<String> bookerIds) {
         return (root, cq, cb) -> (bookerIds != null && !bookerIds.isEmpty()) ? root.get(COLUMN.BOOKER_ID).in(bookerIds) : null;
     }
+    public static Specification<Order> statusIn(List<String> statuses) {
+        return (root, cq, cb) -> (statuses != null && !statuses.isEmpty()) ? root.get(COLUMN.STATUS).in(statuses) : null;
+    }
+
 
     public static Specification<Order> statusIs(String status) {
         return (root, cq, cb) -> (status == null || status.isEmpty()) ? null : cb.equal(root.get(COLUMN.STATUS), status);

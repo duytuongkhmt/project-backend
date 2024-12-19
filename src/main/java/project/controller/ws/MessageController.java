@@ -2,11 +2,10 @@ package project.controller.ws;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import project.model.Message;
+import project.model.entity.Message;
 import project.service.ws.MessageService;
 
 @Controller

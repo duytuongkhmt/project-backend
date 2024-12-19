@@ -1,4 +1,4 @@
-package project.model;
+package project.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -43,6 +43,11 @@ public class Order {
     @JoinColumn(name = "booker_id", insertable = false, updatable = false)
     @JsonBackReference
     private Profile booker;
+
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private Review review;
 
     public static class STATUS {
         public static final String PENDING = "pending";

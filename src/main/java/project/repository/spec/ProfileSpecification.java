@@ -3,8 +3,8 @@ package project.repository.spec;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 import project.common.Constant;
-import project.model.Account;
-import project.model.Profile;
+import project.model.entity.Account;
+import project.model.entity.Profile;
 
 public class ProfileSpecification {
 

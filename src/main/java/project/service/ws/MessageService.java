@@ -3,7 +3,7 @@ package project.service.ws;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.model.Message;
+import project.model.entity.Message;
 import project.repository.ws.MessageRepository;
 
 import java.util.List;

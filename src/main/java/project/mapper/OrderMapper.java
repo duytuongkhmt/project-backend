@@ -1,7 +1,7 @@
 package project.mapper;
 
 import org.springframework.beans.BeanUtils;
-import project.model.Order;
+import project.model.entity.Order;
 import project.resource.OrderResource;
 import project.resource.ProfileResource;
 
