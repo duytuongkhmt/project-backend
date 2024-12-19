@@ -21,6 +21,7 @@ public class OrderResource {
     private String reasonReject;
     private ProfileResource booker;
     private ProfileResource artist;
+    private ReviewResource review;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

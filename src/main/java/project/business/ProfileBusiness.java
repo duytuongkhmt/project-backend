@@ -8,19 +8,22 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import project.common.Constant;
 import project.mapper.UserMapper;
-import project.model.Account;
-import project.model.Bank;
-import project.model.Profile;
+import project.model.entity.Account;
+import project.model.entity.Bank;
+import project.model.entity.Profile;
+import project.model.entity.Review;
 import project.payload.request.user.BankUpdateRequest;
 import project.payload.request.user.ProfileUpdateRequest;
-import project.resource.BankResource;
 import project.resource.ProfileResource;
+import project.resource.ReviewResource;
 import project.service.ProfileService;
+import project.service.ReviewService;
 import project.service.UserService;
 import project.util.AuthUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +33,7 @@ public class ProfileBusiness {
 
     private final ProfileService profileService;
     private final UserService userService;
+    private final ReviewService reviewService;
 
     public ProfileResource getProfileByCode(String code) {
         Profile profile = profileService.findByProfileCode(code);
@@ -65,6 +69,15 @@ public class ProfileBusiness {
         profile.setBank(bank);
         profileService.save(profile);
         return UserMapper.map(profile);
+    }
+
+    public List<ReviewResource> getReviews(String profileId) {
+        List<Review> reviews = reviewService.getByArtist(profileId);
+        return reviews.stream().map(review -> {
+            ReviewResource reviewResource = new ReviewResource();
+            BeanUtils.copyProperties(review, reviewResource);
+            return reviewResource;
+        }).toList();
     }
 
     // Lưu avatar

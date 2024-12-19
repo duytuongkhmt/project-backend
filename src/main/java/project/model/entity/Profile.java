@@ -1,4 +1,4 @@
-package project.model;
+package project.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,9 +34,10 @@ public class Profile {
     private List<String> genre;
     private Double rate;
     private String gender;
+    private String userId;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false , insertable = false, updatable = false)
     @JsonBackReference
     private Account user;
     private LocalDate birthday;

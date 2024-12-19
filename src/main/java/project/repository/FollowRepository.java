@@ -3,8 +3,7 @@ package project.repository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import project.model.Follow;
-import project.model.Friendship;
+import project.model.entity.Follow;
 
 import java.util.List;
 

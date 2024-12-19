@@ -2,8 +2,8 @@ package project.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.model.Account;
-import project.model.Friendship;
+import project.model.entity.Account;
+import project.model.entity.Friendship;
 import project.repository.FriendshipRepository;
 
 import java.util.List;

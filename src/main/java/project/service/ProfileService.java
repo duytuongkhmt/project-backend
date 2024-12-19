@@ -4,8 +4,8 @@ package project.service;
 import lombok.RequiredArgsConstructor;
 import static org.springframework.data.jpa.domain.Specification.where;
 import org.springframework.stereotype.Service;
-import project.model.Account;
-import project.model.Profile;
+import project.model.entity.Account;
+import project.model.entity.Profile;
 import project.repository.ProfileRepository;
 import static project.repository.spec.ProfileSpecification.*;
 

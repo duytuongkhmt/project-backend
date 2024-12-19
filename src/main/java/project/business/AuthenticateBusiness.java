@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import project.mapper.UserMapper;
-import project.model.Account;
+import project.model.entity.Account;
 import project.payload.request.auth.LoginRequest;
 import project.resource.UserResource;
 import project.sercurity.JwtService;
