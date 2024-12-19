@@ -7,9 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import project.mapper.OrderMapper;
 import project.mapper.UserMapper;
-import project.model.Account;
-import project.model.Order;
-import project.model.Profile;
+import project.model.entity.Account;
+import project.model.entity.Order;
 import project.model.data.ShowTopReport;
 import project.payload.request.user.OrderCreateRequest;
 import project.payload.request.user.OrderRequest;
@@ -17,6 +16,7 @@ import project.payload.request.user.OrderUpdateRequest;
 import project.resource.OrderResource;
 import project.resource.ProfileResource;
 import project.resource.ShowTopResource;
+import project.resource.SummaryOrderResource;
 import project.service.OrderService;
 import project.service.ProfileService;
 import project.service.UserService;
@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @Component
@@ -68,11 +67,25 @@ public class OrderBusiness {
         });
     }
 
+    public SummaryOrderResource getSummary(OrderRequest filter) {
+        List<Order> orders = orderService.getByFilter(filter);
+        return new SummaryOrderResource(orders);
+    }
+
     public OrderResource getById(String id) {
         Order order = orderService.findById(id);
         OrderResource orderResource = new OrderResource();
         BeanUtils.copyProperties(order, orderResource);
         return orderResource;
+    }
+
+    public List<OrderResource> getScheduledOfArtist(String id) {
+        List<Order> orders = orderService.getConfirmedOrderByAristId(id);
+       return orders.stream().map(order->{
+            OrderResource orderResource = new OrderResource();
+            BeanUtils.copyProperties(order, orderResource);
+            return orderResource;
+        }).toList();
     }
 
     public void deleteById(String id) {

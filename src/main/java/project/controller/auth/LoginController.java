@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.business.AuthenticateBusiness;
-import project.model.Account;
+import project.model.entity.Account;
 import project.payload.request.auth.LoginRequest;
 import project.payload.response.ResponseObject;
-
-import java.util.Objects;
 
 @Slf4j
 @RestController

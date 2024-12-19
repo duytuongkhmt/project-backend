@@ -1,15 +1,9 @@
 package project.service;
 
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
-import project.model.Account;
-import project.model.Follow;
-import project.model.Friendship;
-import project.model.Profile;
-import project.repository.FollowRepository;
-import project.repository.FriendshipRepository;
-import project.repository.ProfileRepository;
+import project.model.entity.Account;
+import project.model.entity.Profile;
 import project.repository.UserRepository;
 import project.util.AuthUtils;
 

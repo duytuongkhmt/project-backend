@@ -1,9 +1,8 @@
 package project.service.ws;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.model.Conversation;
+import project.model.entity.Conversation;
 import project.repository.ws.ConversationRepository;
 
 import java.util.List;

@@ -2,8 +2,8 @@ package project.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import project.model.Account;
-import project.model.Friendship;
+import project.model.entity.Account;
+import project.model.entity.Friendship;
 
 import java.util.List;
 

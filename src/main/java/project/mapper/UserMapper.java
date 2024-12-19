@@ -1,9 +1,9 @@
 package project.mapper;
 
 import org.springframework.beans.BeanUtils;
-import project.model.Account;
-import project.model.Bank;
-import project.model.Profile;
+import project.model.entity.Account;
+import project.model.entity.Bank;
+import project.model.entity.Profile;
 import project.resource.BankResource;
 import project.resource.ProfileResource;
 import project.resource.UserResource;

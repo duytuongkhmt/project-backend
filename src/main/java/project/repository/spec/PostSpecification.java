@@ -2,7 +2,7 @@ package project.repository.spec;
 
 import org.springframework.data.jpa.domain.Specification;
 import project.common.Constant;
-import project.model.Post;
+import project.model.entity.Post;
 
 public class PostSpecification {
     public static Specification<Post> statusNotDelete() {

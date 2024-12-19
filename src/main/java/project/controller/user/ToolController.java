@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.business.ProfileBusiness;
 import project.business.UserBusiness;
-import project.model.Account;
+import project.model.entity.Account;
 import project.payload.response.ResponseObject;
 import project.resource.ProfileResource;
-import project.resource.UserResource;
 import project.service.UserService;
 
 import java.util.List;

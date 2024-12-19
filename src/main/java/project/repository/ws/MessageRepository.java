@@ -1,7 +1,7 @@
 package project.repository.ws;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.model.Message;
+import project.model.entity.Message;
 
 import java.util.List;
 
