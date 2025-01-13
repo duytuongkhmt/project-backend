@@ -20,4 +20,5 @@ public class UserResource {
     private String role;
     private String profileCode;
     private String profileId;
+
 }

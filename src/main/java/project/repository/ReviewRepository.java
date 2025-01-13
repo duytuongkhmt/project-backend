@@ -11,4 +11,5 @@ import java.util.List;
 public interface ReviewRepository  extends CrudRepository<Review, String>, JpaSpecificationExecutor<Review> {
 
     List<Review> findByArtistId(String id);
+    Review findByOrderId(String id);
 }

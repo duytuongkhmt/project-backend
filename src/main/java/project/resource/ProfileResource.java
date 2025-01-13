@@ -26,7 +26,6 @@ public class ProfileResource {
     private Integer totalBook;
     private Double hourOfPerformance;
     private String address;
-    private Double price;
     private String note;
     private String bio;
     private String gender;
@@ -37,6 +36,7 @@ public class ProfileResource {
     private Double rate;
     private List<String> genre;
     private BankResource bank;
+    private LocalDate joinDay;
 
     public Integer getAge(){
         if (birthday == null) {

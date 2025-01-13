@@ -24,13 +24,31 @@ public class UserMapper {
         return usersResource;
     }
 
-    public static ProfileResource map(Profile profile) {
+    public static ProfileResource map(Profile profile,Integer totalFriend) {
         ProfileResource profileResource = new ProfileResource();
         BeanUtils.copyProperties(profile, profileResource);
-        profileResource.setFullName(profile.getUser().getFullName());
         profileResource.setRole(profile.getUser().getRole().name());
         profileResource.setEmail(profile.getUser().getEmail());
         profileResource.setMobile(profile.getUser().getMobile());
+        profileResource.setJoinDay(profile.getUser().getConfirmedAt());
+        Bank bank = profile.getBank();
+        if (bank != null) {
+            BankResource resource = new BankResource();
+            BeanUtils.copyProperties(bank, resource);
+            profileResource.setBank(resource);
+        } else {
+            profileResource.setBank(null);
+        }
+        profileResource.setTotalFriend(totalFriend);
+        return profileResource;
+    }
+    public static ProfileResource map(Profile profile) {
+        ProfileResource profileResource = new ProfileResource();
+        BeanUtils.copyProperties(profile, profileResource);
+        profileResource.setRole(profile.getUser().getRole().name());
+        profileResource.setEmail(profile.getUser().getEmail());
+        profileResource.setMobile(profile.getUser().getMobile());
+        profileResource.setJoinDay(profile.getUser().getConfirmedAt());
         Bank bank = profile.getBank();
         if (bank != null) {
             BankResource resource = new BankResource();

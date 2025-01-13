@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name="post_medias")
+@Table(name = "post_medias")
 public class PostMedia {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -17,14 +17,14 @@ public class PostMedia {
 //    @Column(name = "post_id")
 //    private String postId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id")
     private Post post;
 
     private String url;
 
     private String type; // image, video, etc.
 
-    @Column(name="`order`")
+    @Column(name = "`order`")
     private Integer order;
 
     @UpdateTimestamp
@@ -32,8 +32,5 @@ public class PostMedia {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public static class TYPE {
-        public static final String IMAGE = "image";
-        public static final String VIDEO = "video";
-    }
+
 }

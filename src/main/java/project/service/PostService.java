@@ -7,26 +7,36 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import project.model.entity.Post;
 import project.model.entity.PostMedia;
+import project.model.entity.Profile;
 import project.payload.request.user.PostRequest;
 import project.repository.PostMediaRepository;
 import project.repository.PostRepository;
+import project.repository.ProfileRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.data.jpa.domain.Specification.where;
+import static project.repository.spec.PostSpecification.profileIs;
 import static project.repository.spec.PostSpecification.statusNotDelete;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-    private final PostMediaRepository mediaRepository;
+    private final ProfileRepository profileRepository;
 
 
     public Page<Post> getByFilter(PostRequest request, PageRequest pageRequest) {
-        return postRepository.findAll(where(statusNotDelete()),pageRequest);
+        Profile profile = null;
+        if (request.getUserId() != null) {
+            profile = profileRepository.findById(request.getUserId()).orElse(null);
+        }
+        return postRepository.findAll(where(
+                        statusNotDelete())
+                        .and(profileIs(profile))
+                , pageRequest);
     }
 
     public Post getById(String id) {
@@ -39,12 +49,13 @@ public class PostService {
         Post post = new Post();
         BeanUtils.copyProperties(newPost, post);
         List<PostMedia> postMediaList = new ArrayList<>();
-        newPost.getMediaList().forEach(media -> {
-            PostMedia postMedia = new PostMedia();
-            BeanUtils.copyProperties(media, postMedia);
-            postMediaList.add(postMedia);
-
-        });
+        if (newPost.getMediaList() != null) {
+            newPost.getMediaList().forEach(media -> {
+                PostMedia postMedia = new PostMedia();
+                BeanUtils.copyProperties(media, postMedia);
+                postMediaList.add(postMedia);
+            });
+        }
         post.setMediaList(postMediaList);
 
         return postRepository.save(post);
@@ -60,6 +71,6 @@ public class PostService {
 
 
     public Post findById(String id) {
-            return postRepository.findByIdIs(id);
+        return postRepository.findByIdIs(id);
     }
 }

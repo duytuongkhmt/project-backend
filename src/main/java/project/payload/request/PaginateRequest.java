@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 public class PaginateRequest {
     private Integer limit;
     private Integer page;
-    private String column = "id";
+    private String column = "createdAt";
     private String sortOrder = "desc";
 
     public Sort.Direction getSort() {

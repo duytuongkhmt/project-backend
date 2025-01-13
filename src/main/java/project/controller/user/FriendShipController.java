@@ -21,6 +21,11 @@ public class FriendShipController {
         List<ProfileResource> result = userBusiness.getFriend();
         return ResponseEntity.ok(ResponseObject.ok(result));
     }
+    @GetMapping("/search/{id}")
+    public ResponseEntity<ResponseObject> getFriendsByProfileId(@PathVariable String id) {
+        List<ProfileResource> result = userBusiness.getFriendsByProfileId(id);
+        return ResponseEntity.ok(ResponseObject.ok(result));
+    }
 
     @PutMapping
     public ResponseEntity<ResponseObject> addFriend( @RequestParam String id) {
