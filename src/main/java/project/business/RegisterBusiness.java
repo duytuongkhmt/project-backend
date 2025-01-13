@@ -12,6 +12,7 @@ import project.model.entity.Account;
 import project.model.entity.Bank;
 import project.model.entity.Profile;
 import project.payload.request.auth.RegisterRequest;
+import project.service.ProfileService;
 import project.service.UserService;
 import project.service.email.EmailSender;
 
@@ -29,6 +30,7 @@ public class RegisterBusiness {
     private final EmailSender emailSender;
     @Value("${verify.account.url}")
     private String urlVerify;
+
     public String register(RegisterRequest registerRequest) {
         String token = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
         saveUserInfo(registerRequest, token);
@@ -73,17 +75,16 @@ public class RegisterBusiness {
         Profile profile = Profile.builder()
                 .bio("Welcome to my profile!")
                 .coverPhoto(null)
+                .fullName(registerRequest.getFullName())
                 .genre(new ArrayList<>())
                 .rate(0.0)
                 .price(0.0)
                 .profileCode(generateRandomNumberString(10))
                 .note(null)
                 .build();
-        Bank bank=new Bank();
-        profile.setBank(bank);
-        bank.setProfile(profile);
-        user.setProfile(profile);
+
         profile.setUser(user);
+        user.setProfile(profile);
         usersService.save(user);
     }
 
@@ -110,6 +111,7 @@ public class RegisterBusiness {
 
         return "confirmed";
     }
+
     private String generateRandomNumberString(int length) {
         Random random = new Random();
         StringBuilder result = new StringBuilder();

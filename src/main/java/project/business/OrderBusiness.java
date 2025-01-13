@@ -13,10 +13,7 @@ import project.model.data.ShowTopReport;
 import project.payload.request.user.OrderCreateRequest;
 import project.payload.request.user.OrderRequest;
 import project.payload.request.user.OrderUpdateRequest;
-import project.resource.OrderResource;
-import project.resource.ProfileResource;
-import project.resource.ShowTopResource;
-import project.resource.SummaryOrderResource;
+import project.resource.*;
 import project.service.OrderService;
 import project.service.ProfileService;
 import project.service.UserService;
@@ -34,8 +31,9 @@ public class OrderBusiness {
     private final OrderService orderService;
     private final UserService userService;
     private final ProfileService profileService;
+    private final ProfileBusiness profileBusiness;
 
-
+    //feat lấy danh sách đơn có phân trang
     public Page<OrderResource> getOrderResources(OrderRequest request, PageRequest pageRequest) {
         String userName = AuthUtils.getCurrentUsername();
         Account account = userService.findByUsername(userName);
@@ -66,7 +64,7 @@ public class OrderBusiness {
             return OrderMapper.map(order, booker, artist);
         });
     }
-
+    //feat lấy tổng các trạng thái
     public SummaryOrderResource getSummary(OrderRequest filter) {
         List<Order> orders = orderService.getByFilter(filter);
         return new SummaryOrderResource(orders);
@@ -84,7 +82,10 @@ public class OrderBusiness {
        return orders.stream().map(order->{
             OrderResource orderResource = new OrderResource();
             BeanUtils.copyProperties(order, orderResource);
-            return orderResource;
+
+           ProfileResource booker = profileBusiness.getById(order.getBookerId());
+           ProfileResource artist =  profileBusiness.getById(order.getArtistId());
+           return OrderMapper.map(order, booker, artist);
         }).toList();
     }
 
@@ -104,26 +105,27 @@ public class OrderBusiness {
         return orderResource;
 
     }
-
+    //feat  kiểm tra xem tạo đơn được không
     public Boolean checkAvailable(OrderCreateRequest request) {
         if (request.getFrom().isBefore(LocalDateTime.now())) {
             return false;
         }
         return orderService.checkAvailable(request);
     }
-
+    //feat kiểm tra xem chỉnh sửa lại đơn được không
     public Boolean checkAvailable(OrderUpdateRequest request) {
         if (request.getFrom().isBefore(LocalDateTime.now())) {
             return false;
         }
         return orderService.checkAvailable(request);
     }
-
+    //feat kiểm tra xem có thể câp nhật trạng thái không
     public Boolean checkAvailable(String id) {
         return orderService.checkAvailableChangeStatus(id);
     }
 
 
+    //feat  chỉnh sửa đơn
     public OrderResource update(OrderUpdateRequest request) {
         Order order = orderService.findById(request.getId());
         BeanUtils.copyProperties(request, order);
@@ -146,6 +148,7 @@ public class OrderBusiness {
 
     }
 
+    //feat Thống kê doanh thu
     public List<ShowTopResource> getShowTopReport(OrderRequest request) {
         String userName = AuthUtils.getCurrentUsername();
         Account account = userService.findByUsername(userName);

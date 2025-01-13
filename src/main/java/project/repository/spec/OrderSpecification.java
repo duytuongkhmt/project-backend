@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.Specification;
 import project.common.Constant.COLUMN;
 import project.model.entity.Order;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,6 +24,23 @@ public class OrderSpecification {
                 return null;
             }
             return cb.greaterThanOrEqualTo(root.get(COLUMN.FROM), from);
+        };
+    }
+
+    public static Specification<Order> unFinished() {
+        return (root, cq, cb) -> {
+            LocalDateTime now = LocalDateTime.now();
+            return cb.greaterThanOrEqualTo(root.get(COLUMN.TO), now);
+        };
+    }
+
+    public static Specification<Order> checkTiming() {
+        return (root, cq, cb) -> {
+            LocalDateTime now = LocalDateTime.now();
+            return cb.and(
+                    cb.lessThanOrEqualTo(root.get(COLUMN.FROM), now),
+                    cb.greaterThanOrEqualTo(root.get(COLUMN.TO), now)
+            );
         };
     }
 
@@ -73,8 +91,6 @@ public class OrderSpecification {
     }
 
 
-
-
     public static Specification<Order> artistIdIn(List<String> artistIds) {
         return (root, cq, cb) -> (artistIds != null && !artistIds.isEmpty()) ? root.get(COLUMN.ARTIST_ID).in(artistIds) : null;
     }
@@ -82,6 +98,7 @@ public class OrderSpecification {
     public static Specification<Order> bookerIdIn(List<String> bookerIds) {
         return (root, cq, cb) -> (bookerIds != null && !bookerIds.isEmpty()) ? root.get(COLUMN.BOOKER_ID).in(bookerIds) : null;
     }
+
     public static Specification<Order> statusIn(List<String> statuses) {
         return (root, cq, cb) -> (statuses != null && !statuses.isEmpty()) ? root.get(COLUMN.STATUS).in(statuses) : null;
     }

@@ -53,9 +53,9 @@ public class OrderService {
 
     public List<Order> getConfirmedOrderByAristId(String id) {
         return orderRepository.findAll(where(
-                checkTimeFrom(LocalDateTime.now())
+                unFinished()
                         .and(artistIdIn(List.of(id)))
-                        .and(statusIn(List.of(Order.STATUS.CONFIRMED, Order.STATUS.SUCCESS)))
+                        .and(statusIn(List.of(Order.STATUS.CONFIRMED)))
         ));
     }
 
@@ -139,12 +139,12 @@ public class OrderService {
         List<Predicate> predicates = new ArrayList<>();
         List<Expression<?>> groupByExpressions = new ArrayList<>();
 
-        Expression<java.sql.Date> dayOnly = cb.function(
-                "DATE", java.sql.Date.class, root.get(Constant.COLUMN.FROM)
+        Expression<String> dayOnlyAsString = cb.function(
+                "TO_CHAR", String.class, root.get(Constant.COLUMN.FROM), cb.literal("YYYY-MM-DD")
         );
 
-        selections.add(dayOnly.alias("key"));
-        groupByExpressions.add(dayOnly);
+        selections.add(dayOnlyAsString.alias("key"));
+        groupByExpressions.add(dayOnlyAsString);
 
         selections.add(cb.sum(root.get(Constant.COLUMN.PRICE)).alias("value"));
 

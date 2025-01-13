@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -45,13 +46,13 @@ public class Order {
     private Profile booker;
 
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Review review;
 
     public static class STATUS {
         public static final String PENDING = "pending";
         public static final String CONFIRMED = "confirmed";
+        public static final String PERFORMING = "performing";
         public static final String SUCCESS = "success";
         public static final String DELETED = "deleted";
         public static final String CANCEL = "cancel";

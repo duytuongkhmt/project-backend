@@ -1,11 +1,14 @@
 package project.business;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import project.config.MD5PasswordEncoder;
 import project.mapper.UserMapper;
 import project.model.entity.Account;
 import project.model.entity.Friendship;
 import project.model.entity.Profile;
+import project.payload.request.auth.UpdatePasswordRequest;
 import project.resource.FriendshipResource;
 import project.resource.ProfileResource;
 import project.resource.UserResource;
@@ -28,6 +31,14 @@ public class UserBusiness {
         String userName = AuthUtils.getCurrentUsername();
         Account account = userService.findByUsername(userName);
 
+        List<Account> friends = friendshipService.getFriends(account);
+        List<Profile> friendProfiles = friends.stream().map(Account::getProfile).toList();
+        return friendProfiles.stream().map(UserMapper::map).toList();
+    }
+
+    public List<ProfileResource> getFriendsByProfileId(String id) {
+        Profile profile = profileService.getProfileById(id);
+        Account account = profile.getUser();
         List<Account> friends = friendshipService.getFriends(account);
         List<Profile> friendProfiles = friends.stream().map(Account::getProfile).toList();
         return friendProfiles.stream().map(UserMapper::map).toList();
@@ -143,6 +154,20 @@ public class UserBusiness {
 
     private Profile getMyProfile() {
         return getMyAccount().getProfile();
+    }
+    private final MD5PasswordEncoder passwordEncoder;
+
+    public String changePassword(UpdatePasswordRequest updatePasswordRequest) {
+        Account myAccount = getMyAccount();
+        if (!myAccount.getPassword().equals(passwordEncoder.encode(updatePasswordRequest.getCurrentPassword()))) {
+            return "The old password is incorrect";
+        }
+        if (!updatePasswordRequest.getNewPassword().equals(updatePasswordRequest.getConfirmNewPassword())) {
+            return "Passwords do not match";
+        }
+        myAccount.setPassword(passwordEncoder.encode(updatePasswordRequest.getNewPassword()));
+        userService.save(myAccount);
+        return "Update Password Successfull";
     }
 
 }

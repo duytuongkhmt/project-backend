@@ -1,17 +1,13 @@
 package project.controller.user;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.business.ProfileBusiness;
-import project.payload.request.user.OrderCreateRequest;
+import project.business.ReviewBusiness;
 import project.payload.request.user.ReviewCreateRequest;
+import project.payload.request.user.ReviewUpdateRequest;
 import project.payload.response.ResponseObject;
-import project.resource.OrderResource;
 import project.resource.ReviewResource;
-import project.service.ReviewService;
 
 import java.util.List;
 
@@ -19,20 +15,35 @@ import java.util.List;
 @RequestMapping("/api/v1/review")
 @RequiredArgsConstructor
 public class ReviewController {
-    private final ProfileBusiness profileBusiness;
-    private final ReviewService reviewService;
+    private final ReviewBusiness reviewBusiness;
 
     @GetMapping({"/{id}", "/{id}/"})
     public ResponseEntity<ResponseObject> getReviewByArtist(@PathVariable String id) {
-        List<ReviewResource> resources = profileBusiness.getReviews(id);
+        List<ReviewResource> resources = reviewBusiness.getReviewByArtistId(id);
         return ResponseEntity.ok(new ResponseObject(resources));
+    }
 
+    @GetMapping({"/order/{id}", "/{id}/"})
+    public ResponseEntity<ResponseObject> getReviewByOrder(@PathVariable String id) {
+        ReviewResource resources = reviewBusiness.getReviewByOrder(id);
+        return ResponseEntity.ok(new ResponseObject(resources));
     }
 
     @PostMapping({"/create", "/create/"})
     public ResponseEntity<ResponseObject> store(@RequestBody ReviewCreateRequest request) {
+        reviewBusiness.saveReview(request);
+        return ResponseEntity.ok(ResponseObject.ok("Ok"));
+    }
 
-        ReviewResource reviewResource = reviewService.(request);
-        return ResponseEntity.ok(ResponseObject.ok(orderResource));
+    @PutMapping({"/update", "/update/"})
+    public ResponseEntity<ResponseObject> update(@RequestBody ReviewUpdateRequest request) {
+        reviewBusiness.updateReview(request);
+        return ResponseEntity.ok(ResponseObject.ok("Ok"));
+    }
+
+    @DeleteMapping({"/{id}", "/{id}/"})
+    public ResponseEntity<ResponseObject> delete(@PathVariable String id) {
+        reviewBusiness.deleteReview(id);
+        return ResponseEntity.ok(new ResponseObject("Ok"));
     }
 }

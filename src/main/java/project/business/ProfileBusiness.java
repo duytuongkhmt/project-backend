@@ -16,6 +16,7 @@ import project.payload.request.user.BankUpdateRequest;
 import project.payload.request.user.ProfileUpdateRequest;
 import project.resource.ProfileResource;
 import project.resource.ReviewResource;
+import project.service.FriendshipService;
 import project.service.ProfileService;
 import project.service.ReviewService;
 import project.service.UserService;
@@ -33,11 +34,13 @@ public class ProfileBusiness {
 
     private final ProfileService profileService;
     private final UserService userService;
-    private final ReviewService reviewService;
+    private final FriendshipService friendshipService;
 
     public ProfileResource getProfileByCode(String code) {
         Profile profile = profileService.findByProfileCode(code);
-        return UserMapper.map(profile);
+        Account account = profile.getUser();
+        List<Account> friends = friendshipService.getFriends(account);
+        return UserMapper.map(profile,friends.size());
     }
 
     public ProfileResource getById(String id) {
@@ -51,7 +54,7 @@ public class ProfileBusiness {
         Profile profile = profileService.getProfileById(request.getId());
         BeanUtils.copyProperties(request, profile);
         profile.getUser().setMobile(request.getMobile());
-        profile.getUser().setFullName(request.getFullName());
+        profile.setFullName(request.getFullName());
         profile = profileService.save(profile);
         return UserMapper.map(profile);
     }
@@ -69,15 +72,6 @@ public class ProfileBusiness {
         profile.setBank(bank);
         profileService.save(profile);
         return UserMapper.map(profile);
-    }
-
-    public List<ReviewResource> getReviews(String profileId) {
-        List<Review> reviews = reviewService.getByArtist(profileId);
-        return reviews.stream().map(review -> {
-            ReviewResource reviewResource = new ReviewResource();
-            BeanUtils.copyProperties(review, reviewResource);
-            return reviewResource;
-        }).toList();
     }
 
     // Lưu avatar
@@ -99,27 +93,23 @@ public class ProfileBusiness {
             throw new RuntimeException(type + " file is required.");
         }
 
-        // Kiểm tra định dạng tệp
         Pattern pattern = Pattern.compile("(.+)\\.(png|gif|jpg|jpeg|webp|svg)$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(file.getOriginalFilename());
         if (!matcher.matches()) {
             throw new RuntimeException("You can only upload image files.");
         }
 
-        // Đường dẫn lưu tệp
         String fileName = AuthUtils.getCurrentUsername() + "_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
         String destinationPath = Constant.UPLOAD_DIR + "/" + type + "/" + fileName;
 
         try {
             File destinationFile = new File(destinationPath);
-            destinationFile.getParentFile().mkdirs(); // Tạo thư mục nếu chưa tồn tại
-            file.transferTo(destinationFile); // Lưu tệp
+            destinationFile.getParentFile().mkdirs();
+            file.transferTo(destinationFile);
 
             saveUrl(destinationFile, type);
 
-            // Lưu thông tin đường dẫn tệp vào DB (có thể cập nhật hồ sơ người dùng ở đây)
-            // profile.setAvatarUrl(destinationPath); (hoặc tương tự)
-            return destinationPath; // Trả về đường dẫn hoặc URL
+            return destinationPath;
         } catch (IOException e) {
             throw new RuntimeException("Failed to save " + type + " file.", e);
         }
