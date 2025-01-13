@@ -29,7 +29,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(registerEndpoint).setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint(registerEndpoint)
+                .setAllowedOrigins("http://localhost:3000")
+                .withSockJS();  // Sử dụng SockJS nếu WebSocket không khả dụng
     }
 
 }

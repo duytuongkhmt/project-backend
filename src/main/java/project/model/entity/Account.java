@@ -49,10 +49,13 @@ public class Account implements UserDetails, Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
     private String profileId;
-    @ManyToOne
-    @JoinColumn(name = "conversation_id")
-    @JsonBackReference
-    private Conversation conversation;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "conversation_participants",
+//            joinColumns = @JoinColumn(name = "account_id"),
+//            inverseJoinColumns = @JoinColumn(name = "conversation_id")
+//    )
+//    private List<Conversation> conversations;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Follow> followers;

@@ -22,11 +22,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .anyRequest().authenticated())
-//                .oauth2Login()
+                        .requestMatchers("/api/v1/auth/**").permitAll()  // Các
+                        .requestMatchers("/ws/**").permitAll()// API xác thực có thể được public
+                        .anyRequest().authenticated())  // Các yêu cầu khác yêu cầu xác thực
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

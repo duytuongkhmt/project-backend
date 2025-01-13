@@ -4,6 +4,7 @@ package project.controller.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import project.model.entity.Conversation;
+import project.payload.request.chat.ConversationCreateRequest;
 import project.service.ws.ConversationService;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class ConversationController {
 
 
     @PostMapping
-    public Conversation createConversation(@RequestBody Conversation conversation) {
+    public Conversation createConversation(@RequestBody ConversationCreateRequest conversation) {
         return conversationService.createConversation(conversation);
     }
 

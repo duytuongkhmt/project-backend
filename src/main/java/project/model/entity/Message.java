@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name="massages")
+@Table(name="messages")
 public class Message {
     @Id
     @UuidGenerator
@@ -22,7 +22,7 @@ public class Message {
     @Enumerated(EnumType.STRING)
     private MessageType type; // TEXT, IMAGE, VIDEO
 
-
+    private String content;
     public enum MessageType {
         TEXT, IMAGE, VIDEO
     }

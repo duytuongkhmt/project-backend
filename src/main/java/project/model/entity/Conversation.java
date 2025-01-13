@@ -1,5 +1,6 @@
 package project.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,10 +20,14 @@ public class Conversation {
     private String name;
     private Boolean isGroup;
 
-    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Account> participants;
+//    @ManyToMany(mappedBy = "conversations", cascade = CascadeType.ALL)
+//    @JsonBackReference
+//    private List<Account> participants;
 
-    @OneToMany(mappedBy = "conversation")
+    private String user1;
+    private String user2;
+
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages;
 
     @CreationTimestamp
