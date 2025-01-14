@@ -22,11 +22,14 @@ public class ProfileController {
         return ResponseEntity.ok(ResponseObject.ok(result));
     }
 
+
+
     @GetMapping("/{code}")
     public ResponseEntity<ResponseObject> getProfileByCode(@PathVariable String code) {
         ProfileResource result = profileBusiness.getProfileByCode(code);
         return ResponseEntity.ok(ResponseObject.ok(result));
     }
+
     @PutMapping("/update")
     public ResponseEntity<ResponseObject> updateProfile(@RequestBody ProfileUpdateRequest request) {
         return ResponseEntity.ok(ResponseObject.ok(profileBusiness.update(request)));
@@ -49,7 +52,7 @@ public class ProfileController {
     }
 
     @PutMapping("/update-bank")
-    public ResponseEntity<ResponseObject> updateBankInfo(@RequestBody BankUpdateRequest request){
+    public ResponseEntity<ResponseObject> updateBankInfo(@RequestBody BankUpdateRequest request) {
         return ResponseEntity.ok(ResponseObject.ok(profileBusiness.saveBankInfo(request)));
     }
 }

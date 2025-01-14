@@ -6,7 +6,7 @@ import project.common.Constant;
 import java.io.File;
 import java.io.IOException;
 
-public class FileUtil {
+public class FileUtils {
     public static String storeFile(MultipartFile file, String type) {
         if (file == null || file.isEmpty()) {
             throw new RuntimeException(type + " file is required.");

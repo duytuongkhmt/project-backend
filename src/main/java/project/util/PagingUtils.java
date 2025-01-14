@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class PagingUtil {
+public class PagingUtils {
     public static PageRequest getPageRequest(Integer page, Integer limit, Sort sort) {
         return PageRequest.of(
                 Objects.requireNonNullElse(page, Constant.PAGE.DEFAULT),

@@ -17,7 +17,7 @@ import project.payload.request.user.OrderUpdateRequest;
 import project.payload.response.ResponseObject;
 import project.resource.OrderResource;
 import project.resource.ShowTopResource;
-import project.util.PagingUtil;
+import project.util.PagingUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -31,9 +31,9 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<ResponseObject> index(OrderRequest orderRequest, PaginateRequest paginateRequest) {
         Sort sort = Sort.by(paginateRequest.getSort(), paginateRequest.getColumn());
-        PageRequest pageRequest = PagingUtil.getPageRequest(paginateRequest.getPage(), paginateRequest.getLimit(), sort);
+        PageRequest pageRequest = PagingUtils.getPageRequest(paginateRequest.getPage(), paginateRequest.getLimit(), sort);
         Page<OrderResource> orderResources = orderBusiness.getOrderResources(orderRequest, pageRequest);
-        Map<String, Object> meta = PagingUtil.createMeta(orderResources);
+        Map<String, Object> meta = PagingUtils.createMeta(orderResources);
         meta.put("summary", orderBusiness.getSummary(orderRequest));
         ResponseObject result = new ResponseObject(orderResources.getContent(), meta);
         return ResponseEntity.ok(result);

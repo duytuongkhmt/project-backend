@@ -4,22 +4,20 @@ package project.business;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import project.common.Constant;
 import project.mapper.UserMapper;
-import project.model.entity.Account;
-import project.model.entity.Bank;
-import project.model.entity.Profile;
-import project.model.entity.Review;
+import project.model.entity.*;
 import project.payload.request.user.BankUpdateRequest;
 import project.payload.request.user.ProfileUpdateRequest;
+import project.payload.request.user.SearchRequest;
 import project.resource.ProfileResource;
 import project.resource.ReviewResource;
-import project.service.FriendshipService;
-import project.service.ProfileService;
-import project.service.ReviewService;
-import project.service.UserService;
+import project.resource.SearchHistoryResource;
+import project.service.*;
 import project.util.AuthUtils;
 
 import java.io.File;
@@ -35,12 +33,13 @@ public class ProfileBusiness {
     private final ProfileService profileService;
     private final UserService userService;
     private final FriendshipService friendshipService;
+    private final SearchHistoryService searchHistoryService;
 
     public ProfileResource getProfileByCode(String code) {
         Profile profile = profileService.findByProfileCode(code);
         Account account = profile.getUser();
         List<Account> friends = friendshipService.getFriends(account);
-        return UserMapper.map(profile,friends.size());
+        return UserMapper.map(profile, friends.size());
     }
 
     public ProfileResource getById(String id) {
@@ -136,4 +135,36 @@ public class ProfileBusiness {
     }
 
 
+    public List<ProfileResource> search(SearchRequest request) {
+        List<Profile> profiles = profileService.getProfileBySearch(request);
+        return profiles.stream().map(UserMapper::map).toList();
+    }
+
+    public Page<ProfileResource> search(SearchRequest request, PageRequest pageRequest) {
+        Page<Profile> profiles = profileService.getProfileBySearch(request,pageRequest);
+        return profiles.map(UserMapper::map);
+    }
+
+    public List<SearchHistoryResource> getHistory() {
+        String username = AuthUtils.getCurrentUsername();
+        Account account = userService.findByUsername(username);
+        Profile profile = account.getProfile();
+        List<SearchHistory> searchHistories = searchHistoryService.getHistories(profile.getId());
+        return searchHistories.stream().map(s -> {
+            SearchHistoryResource resource = new SearchHistoryResource();
+            BeanUtils.copyProperties(s, resource);
+            return resource;
+        }).toList();
+    }
+
+    public void saveHistory(String key) {
+        String username = AuthUtils.getCurrentUsername();
+        Account account = userService.findByUsername(username);
+        Profile profile = account.getProfile();
+
+        SearchHistory searchHistory=new SearchHistory();
+        searchHistory.setKey(key);
+        searchHistory.setUserId(profile.getId());
+        searchHistoryService.save(searchHistory);
+    }
 }

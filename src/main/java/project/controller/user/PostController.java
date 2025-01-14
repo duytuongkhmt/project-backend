@@ -14,19 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.business.PostBusiness;
-import project.model.entity.PostMedia;
 import project.payload.request.PaginateRequest;
 import project.payload.request.user.*;
 import project.payload.response.ResponseObject;
-import project.resource.OrderResource;
 import project.resource.PostResource;
-import project.util.PagingUtil;
+import project.util.PagingUtils;
 
-import javax.print.attribute.standard.Media;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -37,8 +31,9 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<ResponseObject> index(PostRequest postRequest, PaginateRequest paginateRequest) {
+        paginateRequest.setColumn("createdAt");
         Sort sort = Sort.by(paginateRequest.getSort(), paginateRequest.getColumn());
-        PageRequest pageRequest = PagingUtil.getPageRequest(paginateRequest.getPage(), paginateRequest.getLimit(), sort);
+        PageRequest pageRequest = PagingUtils.getPageRequest(paginateRequest.getPage(), paginateRequest.getLimit(), sort);
 
         Page<PostResource> postResources = postBusiness.getPosts(postRequest, pageRequest);
         ResponseObject.Meta meta = new ResponseObject.Meta();

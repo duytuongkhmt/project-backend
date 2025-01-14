@@ -39,5 +39,8 @@ public class Constant {
 
         public static final String STATUS = "status";
         public static final String PAYMENT_PERCENT = "paymentPercent";
+        public static final String RATE = "rate";
+        public static final String GENRE = "genre";
+        public static final String IS_DELETE = "isDelete";
     }
 }

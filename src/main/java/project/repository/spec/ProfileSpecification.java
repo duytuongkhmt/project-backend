@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.Specification;
 import project.common.Constant;
 import project.model.entity.Account;
 import project.model.entity.Profile;
+import project.util.StringUtils;
 
 public class ProfileSpecification {
 
@@ -31,4 +32,45 @@ public class ProfileSpecification {
             return criteriaBuilder.equal(profileAccountJoin.get(Constant.COLUMN.IS_EMAIL_VERIFIED), true);
         });
     }
+
+    public static Specification<Profile> rateGreaterThanOrEqualTo(Double rate){
+        if (rate == null) {
+            return null;
+        }
+        return ((root, query, cb) -> cb.greaterThanOrEqualTo(root.get(Constant.COLUMN.RATE), rate));
+    }
+
+    public static Specification<Profile> fullNameContain(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return null;
+        }
+
+        String normalizedKeyword = "%" + StringUtils.normalize(name.trim()) + "%";
+
+        return (root, query, cb) ->
+             cb.like(
+                    cb.function("unaccent", String.class, cb.lower(root.get(Constant.COLUMN.FULL_NAME))),
+                    normalizedKeyword
+             );
+    }
+
+    public static Specification<Profile> genreLike(String category){
+        if (category == null || category.trim().isEmpty()) {
+            return null;
+        }
+
+        String normalizedKeyword = "%" + StringUtils.normalize(category.trim()) + "%";
+
+
+        return (root, query, cb) -> cb.like(
+                cb.function(
+                        "unaccent",
+                        String.class,
+                        cb.function("jsonb_array_elements_text", String.class, root.get(Constant.COLUMN.GENRE))
+                ),
+                normalizedKeyword
+        );
+    }
+
+
 }

@@ -14,7 +14,7 @@ import project.resource.CommentResource;
 import project.resource.PostResource;
 import project.service.*;
 import project.util.AuthUtils;
-import project.util.FileUtil;
+import project.util.FileUtils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -68,7 +68,7 @@ public class PostBusiness {
             final Post finalPost = post;
             mediaList = files.stream().map(file -> {
                 String type = Objects.requireNonNull(file.getContentType()).startsWith("image") ? "image" : "video";
-                String url = FileUtil.storeFile(file, type); // Lưu file
+                String url = FileUtils.storeFile(file, type); // Lưu file
                 PostMedia media = new PostMedia();
                 media.setUrl(url);
                 media.setType(type);
