@@ -61,9 +61,11 @@ public class Profile {
     private List<Order> userOrders;
 
     @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Bank bank;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Review> review;
 
     @OneToMany(mappedBy = "profile", fetch = FetchType.EAGER)

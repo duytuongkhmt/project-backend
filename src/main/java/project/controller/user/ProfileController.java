@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import project.business.FriendBusiness;
 import project.business.ProfileBusiness;
 import project.payload.request.user.BankUpdateRequest;
 import project.payload.request.user.ProfileUpdateRequest;
@@ -15,6 +16,7 @@ import project.resource.ProfileResource;
 @RequiredArgsConstructor
 public class ProfileController {
     private final ProfileBusiness profileBusiness;
+    private final FriendBusiness friendBusiness;
 
     @GetMapping("/search/{key}")
     public ResponseEntity<ResponseObject> getProfilesByKey(@PathVariable String key) {
@@ -27,6 +29,7 @@ public class ProfileController {
     @GetMapping("/{code}")
     public ResponseEntity<ResponseObject> getProfileByCode(@PathVariable String code) {
         ProfileResource result = profileBusiness.getProfileByCode(code);
+        result.setFriendship(friendBusiness.checkStatusFriend(result.getId()));
         return ResponseEntity.ok(ResponseObject.ok(result));
     }
 

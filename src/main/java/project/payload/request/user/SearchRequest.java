@@ -10,4 +10,5 @@ public class SearchRequest {
     private String role;
     private Double rate;
     private String category;
+    private String currentId;
 }

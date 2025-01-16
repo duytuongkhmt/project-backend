@@ -36,6 +36,7 @@ public class ProfileResource {
     private Double rate;
     private List<String> genre;
     private BankResource bank;
+    private FriendshipResource friendship;
     private LocalDate joinDay;
 
     public Integer getAge(){

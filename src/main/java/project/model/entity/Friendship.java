@@ -1,5 +1,6 @@
 package project.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,10 +18,12 @@ public class Friendship {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private Account sender;
 
     @ManyToOne
     @JoinColumn(name = "friend_id", nullable = false)
+    @JsonBackReference
     private Account receiver;
 
 

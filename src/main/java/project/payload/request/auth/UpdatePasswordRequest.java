@@ -16,5 +16,5 @@ public class UpdatePasswordRequest {
     private String newPassword;
     @NotBlank
     @Size(min = 6, message = "Password must be at least 6 characters")
-    private String confirmNewPassword;
+    private String confirmPassword;
 }

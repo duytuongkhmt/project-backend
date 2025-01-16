@@ -31,7 +31,6 @@ import java.util.regex.Pattern;
 public class ProfileBusiness {
 
     private final ProfileService profileService;
-    private final UserService userService;
     private final FriendshipService friendshipService;
     private final SearchHistoryService searchHistoryService;
 
@@ -59,9 +58,7 @@ public class ProfileBusiness {
     }
 
     public ProfileResource saveBankInfo(BankUpdateRequest request) {
-        String username = AuthUtils.getCurrentUsername();
-        Account account = userService.findByUsername(username);
-        Profile profile = account.getProfile();
+        Profile profile = AuthUtils.getCurrentProfile();
         Bank bank = profile.getBank();
         if (bank == null) {
             bank = new Bank();
@@ -115,9 +112,8 @@ public class ProfileBusiness {
     }
 
     private void saveUrl(File destinationFile, String type) {
-        String username = AuthUtils.getCurrentUsername();
-        Account account = userService.findByUsername(username);
-        Profile profile = account.getProfile();
+
+        Profile profile = AuthUtils.getCurrentProfile();
         if (type.equals("avatar")) {
             profile.setAvatar(destinationFile.getAbsolutePath());
         } else if (type.equals("cover-photo")) {
@@ -141,15 +137,14 @@ public class ProfileBusiness {
     }
 
     public Page<ProfileResource> search(SearchRequest request, PageRequest pageRequest) {
-        Page<Profile> profiles = profileService.getProfileBySearch(request,pageRequest);
+
+        Page<Profile> profiles = profileService.getProfileBySearch(request, pageRequest);
         return profiles.map(UserMapper::map);
     }
 
     public List<SearchHistoryResource> getHistory() {
-        String username = AuthUtils.getCurrentUsername();
-        Account account = userService.findByUsername(username);
-        Profile profile = account.getProfile();
-        List<SearchHistory> searchHistories = searchHistoryService.getHistories(profile.getId());
+
+        List<SearchHistory> searchHistories = searchHistoryService.getHistories(AuthUtils.getCurrentProfileId());
         return searchHistories.stream().map(s -> {
             SearchHistoryResource resource = new SearchHistoryResource();
             BeanUtils.copyProperties(s, resource);
@@ -158,13 +153,10 @@ public class ProfileBusiness {
     }
 
     public void saveHistory(String key) {
-        String username = AuthUtils.getCurrentUsername();
-        Account account = userService.findByUsername(username);
-        Profile profile = account.getProfile();
-
-        SearchHistory searchHistory=new SearchHistory();
+        SearchHistory searchHistory = new SearchHistory();
         searchHistory.setKey(key);
-        searchHistory.setUserId(profile.getId());
+        searchHistory.setUserId( AuthUtils.getCurrentProfileId());
         searchHistoryService.save(searchHistory);
     }
+
 }

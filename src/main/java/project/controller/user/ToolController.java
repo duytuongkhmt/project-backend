@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import project.business.FriendBusiness;
 import project.business.ProfileBusiness;
 import project.business.UserBusiness;
 import project.model.entity.Account;
@@ -19,11 +20,9 @@ import java.util.List;
 @RequestMapping("/api/v1/tool")
 @RequiredArgsConstructor
 public class ToolController {
-    private final ProfileBusiness profileBusiness;
     private final UserBusiness userBusiness;
     private final UserService userService;
-
-
+    private final FriendBusiness friendBusiness;
 
     @GetMapping("/account")
     public ResponseEntity<ResponseObject> getAllAccount() {
@@ -39,11 +38,8 @@ public class ToolController {
 
     @GetMapping("/pending-profile")
     public ResponseEntity<ResponseObject> getPending() {
-        List<ProfileResource> result = userBusiness.getRequestAddFriends();
+        List<ProfileResource> result = friendBusiness.getRequestAddFriends();
         return ResponseEntity.ok(ResponseObject.ok(result));
     }
-
-
-
 
 }

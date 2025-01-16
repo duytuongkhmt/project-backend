@@ -1,6 +1,7 @@
 package project.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,21 +54,25 @@ public class Account implements UserDetails, Serializable {
     private String profileId;
     @ManyToOne
     @JoinColumn(name = "conversation_id")
-    @JsonBackReference
+    @JsonManagedReference
     private Conversation conversation;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Follow> followers;
 
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Profile profile;
 
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Friendship> friendRequestsSent;
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Friendship> friendRequestsReceived;
 
 
