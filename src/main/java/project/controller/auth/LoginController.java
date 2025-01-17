@@ -32,13 +32,7 @@ public class LoginController {
         if (!user.getIsEmailVerified()) {
             return ResponseEntity.ok(ResponseObject.error("Email not verified", HttpStatus.BAD_REQUEST));
         }
-
-        try {
-            String token = authenticateBusiness.auth(loginRequest, user);
-            return ResponseEntity.ok(ResponseObject.ok(token));
-        } catch (Exception e) {
-            log.error("Login error: ", e);
-            return ResponseEntity.ok(ResponseObject.error(e.getMessage(), HttpStatus.BAD_REQUEST));
-        }
+        String token = authenticateBusiness.auth(loginRequest, user);
+        return ResponseEntity.ok(ResponseObject.ok(token));
     }
 }

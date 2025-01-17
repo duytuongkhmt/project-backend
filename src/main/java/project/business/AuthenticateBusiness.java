@@ -2,8 +2,10 @@ package project.business;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import project.exception.InvalidDataException;
 import project.mapper.UserMapper;
 import project.model.entity.Account;
 import project.payload.request.auth.LoginRequest;
@@ -28,7 +30,14 @@ public class AuthenticateBusiness {
 
 
     public String auth(LoginRequest request, Account users) {
-        return authenticationService.login(request, users);
+
+        try {
+            return authenticationService.login(request, users);
+        } catch (BadCredentialsException e) {
+            throw new InvalidDataException("Tên đăng nhập hoặc mật khẩu không đúng.");
+        } catch (Exception e) {
+            throw new InvalidDataException("Đã xảy ra lỗi khi xác thực.");
+        }
     }
 
     public String auth( Account users) {
