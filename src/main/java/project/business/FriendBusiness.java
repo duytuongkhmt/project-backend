@@ -25,8 +25,7 @@ public class FriendBusiness {
 
 
     public FriendshipResource checkStatusFriend(String friendId) {
-        String userName = AuthUtils.getCurrentUsername();
-        Account sender = userService.findByUsername(userName);
+        Account sender = AuthUtils.getCurrentAccount();
         Account receiver = profileService.getProfileById(friendId).getUser();
         FriendshipResource friendshipResource = new FriendshipResource();
         Friendship friendship1 = friendshipService.findBySenderAndReceiver(sender, receiver);

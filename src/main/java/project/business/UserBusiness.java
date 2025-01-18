@@ -35,7 +35,7 @@ public class UserBusiness {
 
     private final MD5PasswordEncoder passwordEncoder;
 
-    public void  changePassword(UpdatePasswordRequest updatePasswordRequest) {
+    public void changePassword(UpdatePasswordRequest updatePasswordRequest) {
         Account myAccount = AuthUtils.getCurrentAccount();
         if (!passwordEncoder.matches(updatePasswordRequest.getCurrentPassword(), myAccount.getPassword())) {
             throw new InvalidDataException("The old password is incorrect");

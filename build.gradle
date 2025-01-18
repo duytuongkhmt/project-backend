@@ -48,6 +48,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket:3.3.4'
     implementation 'org.springframework:spring-messaging:6.1.12'
     implementation 'com.google.api-client:google-api-client:1.33.0'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
 
     implementation "io.hypersistence:hypersistence-utils-hibernate-62:3.5.0"
 

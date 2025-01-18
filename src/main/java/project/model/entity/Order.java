@@ -56,6 +56,7 @@ public class Order {
         public static final String SUCCESS = "success";
         public static final String DELETED = "deleted";
         public static final String CANCEL = "cancel";
+        public static final String SAME_TIME = "sameTime";
 
     }
 }

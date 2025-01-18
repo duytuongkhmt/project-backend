@@ -14,15 +14,17 @@ import project.model.entity.*;
 import project.payload.request.user.BankUpdateRequest;
 import project.payload.request.user.ProfileUpdateRequest;
 import project.payload.request.user.SearchRequest;
+import project.resource.FriendshipResource;
 import project.resource.ProfileResource;
-import project.resource.ReviewResource;
 import project.resource.SearchHistoryResource;
 import project.service.*;
 import project.util.AuthUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -131,15 +133,22 @@ public class ProfileBusiness {
     }
 
 
-    public List<ProfileResource> search(SearchRequest request) {
-        List<Profile> profiles = profileService.getProfileBySearch(request);
-        return profiles.stream().map(UserMapper::map).toList();
-    }
-
     public Page<ProfileResource> search(SearchRequest request, PageRequest pageRequest) {
-
         Page<Profile> profiles = profileService.getProfileBySearch(request, pageRequest);
-        return profiles.map(UserMapper::map);
+        Map<String, FriendshipResource> map = new HashMap<>();
+        profiles.stream().forEach(profile -> {
+                    FriendshipResource friendshipResource = checkStatusFriend(profile.getId());
+                    if (friendshipResource.getRequester() != null) {
+                        map.put(profile.getId(), friendshipResource);
+                    }
+                }
+        );
+        return profiles.map(profile -> {
+            if(map.containsKey(profile.getId())) {
+                return UserMapper.map(profile, map.get(profile.getId()));
+            }
+            else return UserMapper.map(profile);
+        });
     }
 
     public List<SearchHistoryResource> getHistory() {
@@ -155,8 +164,24 @@ public class ProfileBusiness {
     public void saveHistory(String key) {
         SearchHistory searchHistory = new SearchHistory();
         searchHistory.setKey(key);
-        searchHistory.setUserId( AuthUtils.getCurrentProfileId());
+        searchHistory.setUserId(AuthUtils.getCurrentProfileId());
         searchHistoryService.save(searchHistory);
     }
 
+    private FriendshipResource checkStatusFriend(String friendId) {
+        Account sender = AuthUtils.getCurrentAccount();
+        Account receiver = profileService.getProfileById(friendId).getUser();
+        FriendshipResource friendshipResource = new FriendshipResource();
+        Friendship friendship1 = friendshipService.findBySenderAndReceiver(sender, receiver);
+        Friendship friendship2 = friendshipService.findBySenderAndReceiver(receiver, sender);
+        if (friendship1 != null) {
+            friendshipResource.setStatus(friendship1.getStatus());
+            friendshipResource.setRequester(friendship1.getSender().getProfile().getId());
+        }
+        if (friendship2 != null) {
+            friendshipResource.setStatus(friendship2.getStatus());
+            friendshipResource.setRequester(friendship2.getSender().getProfile().getId());
+        }
+        return friendshipResource;
+    }
 }

@@ -1,11 +1,12 @@
 package project.repository.spec;
 
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import project.common.Constant;
 import project.model.entity.Account;
 import project.model.entity.Profile;
-import project.util.StringUtils;
 
 public class ProfileSpecification {
 
@@ -20,9 +21,10 @@ public class ProfileSpecification {
         if (role == null || role.isEmpty()) {
             return null;
         }
+
         return ((root, query, criteriaBuilder) -> {
             Join<Profile, Account> profileAccountJoin = root.join("user");
-            return criteriaBuilder.equal(profileAccountJoin.get(Constant.COLUMN.ROLE), role);
+            return criteriaBuilder.equal(profileAccountJoin.get(Constant.COLUMN.ROLE), role.toUpperCase());
         });
     }
 
@@ -33,7 +35,7 @@ public class ProfileSpecification {
         });
     }
 
-    public static Specification<Profile> rateGreaterThanOrEqualTo(Double rate){
+    public static Specification<Profile> rateGreaterThanOrEqualTo(Double rate) {
         if (rate == null) {
             return null;
         }
@@ -44,33 +46,31 @@ public class ProfileSpecification {
         if (name == null || name.trim().isEmpty()) {
             return null;
         }
-
-        String normalizedKeyword = "%" + StringUtils.normalize(name.trim()) + "%";
-
+        String normalizedKeyword = "%" + StringUtils.stripAccents(name.trim().toLowerCase()) + "%";
         return (root, query, cb) ->
-             cb.like(
-                    cb.function("unaccent", String.class, cb.lower(root.get(Constant.COLUMN.FULL_NAME))),
-                    normalizedKeyword
-             );
+                cb.like(cb.lower(cb.function("unaccent", String.class, root.get(Constant.COLUMN.FULL_NAME))), normalizedKeyword);
     }
 
-    public static Specification<Profile> genreLike(String category){
+    public static Specification<Profile> genreLike(String category) {
         if (category == null || category.trim().isEmpty()) {
             return null;
         }
 
-        String normalizedKeyword = "%" + StringUtils.normalize(category.trim()) + "%";
+        String normalizedKeyword = "%" + StringUtils.stripAccents(category.trim().toLowerCase()) + "%";
 
+        return (root, query, cb) -> {
+            // Sử dụng function trong CriteriaBuilder để gọi unaccent và jsonb_array_elements_text
+            Expression<String> unaccentedGenre = cb.function("unaccent", String.class,
+                    cb.function("jsonb_array_elements_text", String.class, root.get("genre"))
+            );
 
-        return (root, query, cb) -> cb.like(
-                cb.function(
-                        "unaccent",
-                        String.class,
-                        cb.function("jsonb_array_elements_text", String.class, root.get(Constant.COLUMN.GENRE))
-                ),
-                normalizedKeyword
-        );
+            // Sử dụng LIKE và LOWER để so sánh genre với normalizedKeyword
+            return cb.like(cb.lower(unaccentedGenre), normalizedKeyword);
+        };
     }
+
+
+
 
 
 }

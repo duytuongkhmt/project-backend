@@ -5,6 +5,7 @@ import project.model.entity.Account;
 import project.model.entity.Bank;
 import project.model.entity.Profile;
 import project.resource.BankResource;
+import project.resource.FriendshipResource;
 import project.resource.ProfileResource;
 import project.resource.UserResource;
 
@@ -57,6 +58,12 @@ public class UserMapper {
         } else {
             profileResource.setBank(null);
         }
+        return profileResource;
+    }
+
+    public static ProfileResource map(Profile profile, FriendshipResource friendshipResource) {
+        ProfileResource profileResource = map(profile);
+        profileResource.setFriendship(friendshipResource);
         return profileResource;
     }
 }
