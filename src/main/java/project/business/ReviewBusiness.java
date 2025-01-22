@@ -53,12 +53,11 @@ public class ReviewBusiness {
 
     @Transactional
     public void saveReview(ReviewCreateRequest request) {
-        String username = AuthUtils.getCurrentUsername();
-        Account account = userService.findByUsername(username);
-        Profile profile = account.getProfile();
+
+        String profileId = AuthUtils.getCurrentProfileId();
         Review review = new Review();
         BeanUtils.copyProperties(request, review);
-        review.setUser(profile);
+        review.setUserId(profileId);
         reviewService.save(review);
         updateRateProfile(request.getArtistId());
     }

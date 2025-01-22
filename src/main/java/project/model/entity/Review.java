@@ -20,20 +20,18 @@ public class Review {
     @Column(name = "order_id")
     private String orderId;
 
+    @Column(name = "user_id")
+    private String userId;
+
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false, updatable = false, insertable = false)
     @JsonBackReference
     private Order order;
-    @Column(name = "user_id")
-    private String userId;
     private String artistId;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     @JsonBackReference
     private Profile user;
-
-
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

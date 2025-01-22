@@ -64,9 +64,10 @@ public class Profile {
     @JsonManagedReference
     private Bank bank;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<Review> review;
+    @JsonIgnore
+    private List<Review> reviews;
 
     @OneToMany(mappedBy = "profile", fetch = FetchType.EAGER)
     @JsonManagedReference
